@@ -1,0 +1,20 @@
+Canada
+CAN
+Czech Republic
+CZE
+Denmark
+DEN
+Finland
+FIN
+Kazakhstan
+KAZ
+Russia
+RUS
+Slovakia
+SVK
+Sweden
+SWE
+Switzerland
+SUI
+United States
+USA
