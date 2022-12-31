@@ -1,17 +1,18 @@
 # depslib dependency file v1.0
-1603770832 source:c:\users\logan\documents\code\sportsodds\oddsmain.cpp
+1672464249 source:c:\users\logan\documents\code\sportsodds\oddsmain.cpp
 	"Team.h"
 	"Game.h"
 	"League.h"
+	"SimulationDB.h"
 
-1603770832 c:\users\logan\documents\code\sportsodds\include\team.h
+1672374960 c:\users\logan\documents\code\sportsodds\include\team.h
 	<iostream>
 	<vector>
 	<string>
 	<cmath>
 	<fstream>
 
-1595715525 c:\users\logan\documents\code\sportsodds\include\game.h
+1672381456 c:\users\logan\documents\code\sportsodds\include\game.h
 	<iostream>
 	<vector>
 	<string>
@@ -19,26 +20,34 @@
 	<fstream>
 	"Team.h"
 
-1603771975 c:\users\logan\documents\code\sportsodds\include\league.h
+1672465029 c:\users\logan\documents\code\sportsodds\include\league.h
 	<iostream>
 	<string>
 	<vector>
 	<fstream>
+	<sstream>
 	<utility>
 	<algorithm>
 	<functional>
 	<cmath>
 	<random>
+	<cstdlib>
 	<time.h>
 	"Team.h"
 	"Game.h"
 
-1603770832 source:c:\users\logan\documents\code\sportsodds\src\team.cpp
+1672374960 source:c:\users\logan\documents\code\sportsodds\src\team.cpp
 	"Team.h"
 
-1595716891 source:c:\users\logan\documents\code\sportsodds\src\game.cpp
+1672381448 source:c:\users\logan\documents\code\sportsodds\src\game.cpp
 	"Game.h"
 
-1603771935 source:c:\users\logan\documents\code\sportsodds\src\league.cpp
+1672382308 source:c:\users\logan\documents\code\sportsodds\src\league.cpp
+	"League.h"
+
+1672464555 source:c:\users\logan\documents\code\sportsodds\src\simulationdb.cpp
+	"SimulationDB.h"
+
+1672464165 c:\users\logan\documents\code\sportsodds\include\simulationdb.h
 	"League.h"
 

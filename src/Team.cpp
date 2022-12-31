@@ -14,7 +14,9 @@ Team::Team() {
     winpct = 0;
     exponent = 0;
 
+    //East = 0, West = 1
     conference = 0;
+    //Atlantic = 0, Met = 1, Central = 2, Pacific = 3
     division = 0;
 
     ///fixed value

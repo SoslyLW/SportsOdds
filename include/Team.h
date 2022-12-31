@@ -38,6 +38,12 @@ class Team {
         void setName(string s) { name = s; };
         string getTSN() { return tsn; };
         void setTSN(string s) { tsn = s; };
+
+        int getConference() { return conference; };
+        void setConference(int n) { conference = n; };
+        int getDivision() { return division; };
+        void setDivision(int n) { division = n; };
+
         float getWinPct() { return winpct; };
         void setWinPct(float n) { winpct = n; };
         float getExponent() { return exponent; };

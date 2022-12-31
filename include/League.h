@@ -5,11 +5,13 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <utility>
 #include <algorithm>
 #include <functional>
 #include <cmath>
 #include <random>
+#include <cstdlib>
 #include <time.h>
 
 #include "Team.h"
@@ -17,7 +19,7 @@
 
 using namespace std;
 
-const int trials = 1000000;
+const int trials = 10000;
 
 class League
 {
@@ -66,7 +68,7 @@ class League
         void sortPyth(vector<Team> &v);
 
 
-    private:
+    //private:
         vector<Team> teams;
         vector<Team> simmedTeams;
         vector<Game> sched;

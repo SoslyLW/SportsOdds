@@ -7,114 +7,135 @@ League::League() {
 
 int League::readTeams(string filename) {
     ifstream teamsFile(filename);
-    string temp;
+    string discard;
 
     if (!teamsFile.is_open()) {
         cout << "File not found";
         return 404;
     }
 
+    // Read and do nothing with top row of csv
+    getline(teamsFile, discard);
+
     while (!teamsFile.eof()) {
         Team tempTeam;
+        string line, temp;
 
-        getline(teamsFile, temp);
-        tempTeam.setName(temp);
-        getline(teamsFile, temp);
-        tempTeam.setTSN(temp);
+        getline(teamsFile, line);
+        stringstream s(line);
+        int i = 0;
+
+        //make sure that an empty team is not submitted
+        if (line.empty()) {
+            break;
+        }
+
+        while (getline(s, temp, ',')) {
+            switch (i) {
+                case 0: tempTeam.setName(temp);
+                        break;
+                case 1: tempTeam.setTSN(temp);
+                        break;
+                case 2: tempTeam.setConference(stoi(temp));
+                        break;
+                case 3: tempTeam.setDivision(stoi(temp));
+                        break;
+            }
+            i++;
+        }
 
         teams.push_back(tempTeam);
     }
-
-    cout << "run success" << endl;
 }
 
 int League::readSchedule(string filename) {
     ifstream schedFile(filename);
-    string temp1, temp2;
-    int temp3, temp4, temp5;
+    string discard;
 
     if (!schedFile.is_open()) {
         cout << "File not found";
         return 404;
     }
 
-    while (schedFile >> temp1) {
+    // Read and do nothing with top row of csv
+    getline(schedFile, discard);
+
+    while (!schedFile.eof()) {
         Game tempGame;
+        string line, date, homeTeam, awayTeam, homeGoals, awayGoals, OT, attendance, LOG, notes;
 
-//        getline(schedFile, temp1, ' ');
-//        getline(schedFile, temp2, ' ');
+        getline(schedFile, line);
+        stringstream s(line);
 
-        //schedFile >> temp1;
-        schedFile >> temp2;
+        //make sure that an empty team is not submitted
+        if (line.empty()) {
+            break;
+        }
 
-        char ab;
-        //cout << temp1 << "-" << temp2;
-        //cin >> ab;
+        getline(s, date, ',');
+        getline(s, awayTeam, ',');
+        getline(s, awayGoals, ',');
+        getline(s, homeTeam, ',');
+        getline(s, homeGoals, ',');
+        getline(s, OT, ',');
+        getline(s, attendance, ',');
+        getline(s, LOG, ',');
+        getline(s, notes, ',');
 
+        // Find teams associated with games
         for (int i = 0; i < teams.size(); i++) {
-            if (teams[i].getTSN() == temp1) {
+            if (teams[i].getName() == homeTeam) {
                 tempGame.setHomeTeam(teams[i]);
                 break;
             }
         }
         for (int i = 0; i < teams.size(); i++) {
-            if (teams[i].getTSN() == temp2) {
+            if (teams[i].getName() == awayTeam) {
                 tempGame.setAwayTeam(teams[i]);
                 break;
             }
         }
 
-        //cout << 2;
-
-        schedFile >> temp3;
-
-        if (temp3 == -4) {
-            schedFile >> temp4;
-            schedFile >> temp5;
-            //schedFile.ignore();
-
-            tempGame.setHomeScore(temp4);
-            tempGame.setAwayScore(temp5);
-            tempGame.setOT(true);
+        if (!homeGoals.empty()) {
             tempGame.setPlayed(true);
-        } else if (temp3 != -1) {
-            schedFile >> temp4;
-            //schedFile.ignore();
 
-            tempGame.setHomeScore(temp3);
-            tempGame.setAwayScore(temp4);
-            tempGame.setOT(false);
-            tempGame.setPlayed(true);
-        } else {
-            tempGame.setHomeScore(0);
-            tempGame.setAwayScore(0);
-            tempGame.setPlayed(false);
-            //schedFile.ignore();
+            tempGame.setHomeScore(stoi(homeGoals));
+            tempGame.setAwayScore(stoi(awayGoals));
+
+            if (OT == "OT" || OT == "SO") {
+                tempGame.setOT(true);
+            }
+
+            if (OT == "SO") {
+                tempGame.setSO(true);
+            }
         }
 
+
         sched.push_back(tempGame);
-
     }
-
-    cout << "run success" << endl;
 }
 
 void League::loadFromSchedule() {
     for (int i = 0; i < sched.size(); i++) {
+        // If game has not been played, no need to record stats
         if (!sched[i].getPlayed()) {
             continue;
         }
-        for (int j = 0; j < teams.size(); j++) {
 
+        //Find home team using name (not using pointers to array) and the calculate wins/losses
+        for (int j = 0; j < teams.size(); j++) {
             if (sched[i].getHomeTeam().getTSN() == teams[j].getTSN()) {
                 sched[i].setHomeTeam(teams[j]);
 
                 if (sched[i].getHomeScore() > sched[i].getAwayScore()) {
-                    if (sched[i].getOT()) {
+                    /*if (sched[i].getOT()) {
                         teams[j].setOTW(teams[j].getOTW() + 1);
                     } else {
                         teams[j].setWins(teams[j].getWins() + 1);
-                    }
+                    }*/
+
+                    teams[j].setWins(teams[j].getWins() + 1);
                 } else {
                     if (sched[i].getOT()) {
                         teams[j].setOTL(teams[j].getOTL() + 1);
@@ -128,16 +149,19 @@ void League::loadFromSchedule() {
                 break;
             }
         }
+
         for (int j = 0; j < teams.size(); j++) {
             if (sched[i].getAwayTeam().getTSN() == teams[j].getTSN()) {
                 sched[i].setAwayTeam(teams[j]);
 
                 if (sched[i].getAwayScore() > sched[i].getHomeScore()) {
-                    if (sched[i].getOT()) {
+                    /*if (sched[i].getOT()) {
                         teams[j].setOTW(teams[j].getOTW() + 1);
                     } else {
                         teams[j].setWins(teams[j].getWins() + 1);
-                    }
+                    }*/
+
+                    teams[j].setWins(teams[j].getWins() + 1);
                 } else {
                     if (sched[i].getOT()) {
                         teams[j].setOTL(teams[j].getOTL() + 1);
@@ -154,6 +178,7 @@ void League::loadFromSchedule() {
     }
 }
 
+//Updates team stats for all games in schedule
 void League::refreshTeams() {
     for (int i = 0; i < sched.size(); i++) {
         for (int j = 0; j < teams.size(); j++) {
@@ -171,9 +196,10 @@ void League::refreshTeams() {
     }
 }
 
+//Uses NHL points system of 2 for a win, 1 for OTl, 0 for regulation loss
 void League::pointsAndPercentCalcs() {
     for (int i = 0; i < teams.size(); i++) {
-        teams[i].setPoints((teams[i].getWins() * 3) + (teams[i].getOTW() * 2) + (teams[i].getOTL()));
+        teams[i].setPoints((teams[i].getWins() * 2) + (teams[i].getOTL()));
         teams[i].calcExponent();
         teams[i].setWinPct(getWinPct(teams[i]));
     }
@@ -182,6 +208,11 @@ void League::pointsAndPercentCalcs() {
 float League::getWinPct(Team t) {
     float winPct = 0.5;
     if (t.getGamesPlayed() > 0) {
+        //Give teams with no goals scored 1 goal so as to not give 0% chance of winning
+        if (t.getGoalsFor() == 0) {
+            t.setGoalsFor(1);
+        }
+
         //cout << t.getExponent() << " - " << t.getGoalsFor() << ", " << t.getGoalsAgainst() << " = ";
         winPct = (pow(t.getGoalsFor(), t.getExponent()) / (pow(t.getGoalsFor(), t.getExponent()) + pow(t.getGoalsAgainst(), t.getExponent())));
     }
@@ -205,6 +236,7 @@ void League::predict() {
 void League::printTeams() {
     standingsSort();
     for (int i = 0; i < teams.size(); i++) {
+        cout << i + 1 << ":" << endl;
         cout << teams[i].getTSN() << " - " << teams[i].getName() << endl
              << "W: " << teams[i].getWins() << " L: " << teams[i].getLosses() << " OTW: " << teams[i].getOTW() << " OTL: " << teams[i].getOTL() << endl
              << "Pts: " << teams[i].getPoints() << " GP: " << teams[i].getGamesPlayed() << endl
@@ -389,6 +421,7 @@ void League::sortGamesPlayed() {
     teams = sorted;
 }
 
+//not completely working (treats shootout wins as overtime wins)
 void League::sortROW() {
     vector<Team> sorted(teams.size());
     vector<int> midStep;

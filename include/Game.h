@@ -26,6 +26,8 @@ class Game {
         void setAwayTeam(Team t) { away = t; };
         bool getOT() { return ot; };
         void setOT(bool b) { ot = b; };
+        bool getSO() { return so; };
+        void setSO(bool b) { so = b; };
         bool getPlayed() { return played; };
         void setPlayed(bool b) { played = b; };
         float getHomeWP() { return hWP; };
@@ -40,9 +42,10 @@ class Game {
     private:
         Team home, away;
         int hScore, aScore;
-        bool ot, played;
+        bool ot, so, played;
         float hWP, aWP;
         double prob;
+        string date;
 };
 
 #endif // GAME_H
