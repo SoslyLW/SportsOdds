@@ -4,55 +4,39 @@ SimulationDB::SimulationDB()
 {
     //ctor
     srand(time(NULL));
-    random_device rd;
-    mt19937 generator(time(0));
-    uniform_real_distribution<> dis(0.0, 1.0);
-    auto randomNumber = bind(dis, generator);
-
-    prediction = randomNumber();
-    predictionChange = randomNumber();
+//    random_device rd;
+//    mt19937 generator(time(0));
+//    uniform_real_distribution<> dis(0.0, 1.0);
+//    auto randomNumber = bind(dis, generator);
+//
+//    prediction = randomNumber();
+//    predictionChange = randomNumber();
 
 }
 
 
 void SimulationDB::simulateOne(League league) {
-    /*random_device rd;
-    mt19937 generator(time(0));
-    uniform_real_distribution<> dis(0.0, 1.0);
-    auto randomNumber = bind(dis, generator);*/
-
     ///Steps:
     // 1 - Simulate all the unplayed games
     // 2 - Calculate the updated standings
     // 3 - Determine who makes the playoffs
     // 4 - Save results
 
-    //float prediction = randomNumber();
-    //float predictionChange = randomNumber();
-    //float prediction = randomNumber();
-    //predictionChange = randomNumber();
-
     for (int i = 0; i < league.sched.size(); i++) {
-//            prediction += predictionChange;
-//            if (prediction > 1) {
-//                prediction--;
-//            }
-
         float prediction = (float) rand() / RAND_MAX;
         //cout << prediction << " ";
 
         if (!league.sched[i].getPlayed()) {
             //float prediction = randomNumber();
             league.sched[i].setPlayed(true);
-            league.sched[i].ranProb = prediction;
 
-            // 23% of games go into overtime so if prediction is within 0.115 then count the game as having gone to overtime
+            // 22% of games go into overtime so if prediction is within 0.11 then count the game as having gone to overtime
             if (prediction <= league.sched[i].getProb()) {
                 // Home team won
                 league.sched[i].setHomeScore(1);
                 league.sched[i].setAwayScore(0);
 
-                if (prediction > (league.sched[i].getProb() - 0.115)) {
+                if (prediction > (league.sched[i].getProb() - 0.11)) {
                     league.sched[i].setOT(true);
                 }
 
@@ -61,7 +45,7 @@ void SimulationDB::simulateOne(League league) {
                 league.sched[i].setHomeScore(0);
                 league.sched[i].setAwayScore(1);
 
-                if (prediction < (league.sched[i].getProb() + 0.115)) {
+                if (prediction < (league.sched[i].getProb() + 0.11)) {
                     league.sched[i].setOT(true);
                 }
             }
@@ -92,12 +76,10 @@ void SimulationDB::simulateOne(League league) {
 
         if (westCounter > 8) {
             westCounter--;
-            //break;
             playoffsFull = true;
         }
         if (eastCounter > 8) {
             eastCounter--;
-            //break;
             playoffsFull = true;
         }
 
@@ -114,22 +96,18 @@ void SimulationDB::simulateOne(League league) {
 
         if (atlCounter > 5) {
             atlCounter--;
-//            break;
             playoffsFull = true;
         }
         if (metCounter > 5) {
             metCounter--;
-            //break;
             playoffsFull = true;
         }
         if (cenCounter > 5) {
             cenCounter--;
-            //break;
             playoffsFull = true;
         }
         if (pacCounter > 5) {
             pacCounter--;
-            //break;
             playoffsFull = true;
         }
 
@@ -140,33 +118,11 @@ void SimulationDB::simulateOne(League league) {
                 if (!playoffsFull) {
                     teamResults[j].addPlayoffAppearance();
                 }
-                teamResults[j].finishingPositions[i] += 1;
-                //cout << "added ";
+                teamResults[j].incrementOneFinishingPosition(i);
                 break;
             }
         }
     }
-
-    //Could add option to track average finishing position here
-
-
-
-
-
-    //league.printTeams();
-
-    //cout << prediction;
-    /*for (int i = 0; i < 32; i++) {
-        cout << league.teams[i].getTSN() << " ";
-    }
-    //cout << league.teams[0].getTSN() << endl;
-    cout << endl << endl;*/
-
-    /*if (league.teams[0].getTSN() == "OTT") {
-        cout << "OTT" << endl;
-    }*/
-
-    //league.printTeamSchedule("Montreal Canadiens");
 }
 
 void SimulationDB::simulate(League league) {
@@ -184,6 +140,7 @@ void SimulationDB::simulate(League league) {
 }
 
 void SimulationDB::printSimulationResults() {
+    standingsSort(teamResults);
     sortOdds(teamResults);
 //    sortPyth(teamResults);
     for (int i = 0; i < teamResults.size(); i++) {
@@ -191,7 +148,7 @@ void SimulationDB::printSimulationResults() {
 
         //Calculate Average finishing position
         for (int j = 0; j < 32; j++) {
-            sumFinishes += (teamResults[i].finishingPositions[j] * (j + 1));
+            sumFinishes += (teamResults[i].getOneFinishingPosition(j) * (j + 1));
         }
 
         cout << i + 1 << ":" << endl;
@@ -207,6 +164,8 @@ void SimulationDB::printSimulationResults() {
 
 void SimulationDB::printSimulationResultsToFile(string filename) {
     ofstream f(filename);
+
+    standingsSort(teamResults);
     sortOdds(teamResults);
 //    sortPyth(teamResults);
     for (int i = 0; i < teamResults.size(); i++) {
@@ -214,7 +173,7 @@ void SimulationDB::printSimulationResultsToFile(string filename) {
 
         //Calculate Average finishing position
         for (int j = 0; j < 32; j++) {
-            sumFinishes += (teamResults[i].finishingPositions[j] * (j + 1));
+            sumFinishes += (teamResults[i].getOneFinishingPosition(j) * (j + 1));
         }
 
         f << i + 1 << ":" << endl;
@@ -242,15 +201,15 @@ void SimulationDB::sortPoints(vector<Team> &v) {
     vector<Team> sorted(v.size());
     vector<int> midStep;
 
-    //copy all the titles to a separate vector
+
     for (int i = 0; i < v.size(); i++) {
         midStep.push_back(v[i].getPoints());
     }
 
-    //sort that vector
+
     sort(midStep.begin(), midStep.end(), greater<int>());
 
-    //look through a copy of the database to assign the rest of the values in the movies to their given titles
+
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < v.size(); j++) {
             if (midStep[i] == v[j].getPoints()) {
@@ -261,7 +220,7 @@ void SimulationDB::sortPoints(vector<Team> &v) {
         }
     }
 
-    //move it all to the movies vector
+
     v = sorted;
 }
 
@@ -269,15 +228,15 @@ void SimulationDB::sortGamesPlayed(vector<Team> &v) {
     vector<Team> sorted(v.size());
     vector<int> midStep;
 
-    //copy all the titles to a separate vector
+
     for (int i = 0; i < v.size(); i++) {
         midStep.push_back(v[i].getGamesPlayed());
     }
 
-    //sort that vector
+
     sort(midStep.begin(), midStep.end());
 
-    //look through a copy of the database to assign the rest of the values in the movies to their given titles
+
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < v.size(); j++) {
             if (midStep[i] == v[j].getGamesPlayed()) {
@@ -288,7 +247,7 @@ void SimulationDB::sortGamesPlayed(vector<Team> &v) {
         }
     }
 
-    //move it all to the movies vector
+
     v = sorted;
 }
 
@@ -296,15 +255,15 @@ void SimulationDB::sortROW(vector<Team> &v) {
     vector<Team> sorted(v.size());
     vector<int> midStep;
 
-    //copy all the titles to a separate vector
+
     for (int i = 0; i < v.size(); i++) {
         midStep.push_back(v[i].getWins() + v[i].getOTW());
     }
 
-    //sort that vector
+
     sort(midStep.begin(), midStep.end(), greater<int>());
 
-    //look through a copy of the database to assign the rest of the values in the movies to their given titles
+
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < v.size(); j++) {
             if (midStep[i] == v[j].getWins() + v[j].getOTW()) {
@@ -323,15 +282,15 @@ void SimulationDB::sortDifferential(vector<Team> &v) {
     vector<Team> sorted(v.size());
     vector<int> midStep;
 
-    //copy all the titles to a separate vector
+
     for (int i = 0; i < v.size(); i++) {
         midStep.push_back(v[i].getGoalsFor() - v[i].getGoalsAgainst());
     }
 
-    //sort that vector
+
     sort(midStep.begin(), midStep.end(), greater<int>());
 
-    //look through a copy of the database to assign the rest of the values in the movies to their given titles
+
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < v.size(); j++) {
             if (midStep[i] == v[j].getGoalsFor() - v[j].getGoalsAgainst()) {
@@ -342,7 +301,7 @@ void SimulationDB::sortDifferential(vector<Team> &v) {
         }
     }
 
-    //move it all to the movies vector
+
     v = sorted;
 }
 
@@ -350,15 +309,15 @@ void SimulationDB::sortPyth(vector<Team> &v) {
     vector<Team> sorted(v.size());
     vector<float> midStep;
 
-    //copy all the titles to a separate vector
+
     for (int i = 0; i < v.size(); i++) {
         midStep.push_back(v[i].getWinPct());
     }
 
-    //sort that vector
+
     sort(midStep.begin(), midStep.end(), greater<float>());
 
-    //look through a copy of the database to assign the rest of the values in the movies to their given titles
+
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < v.size(); j++) {
             if (midStep[i] == v[j].getWinPct()) {
@@ -369,7 +328,7 @@ void SimulationDB::sortPyth(vector<Team> &v) {
         }
     }
 
-    //move it all to the movies vector
+
     v = sorted;
 }
 
@@ -377,15 +336,15 @@ void SimulationDB::sortOdds(vector<Team> &v) {
     vector<Team> sorted(v.size());
     vector<float> midStep;
 
-    //copy all the titles to a separate vector
+
     for (int i = 0; i < v.size(); i++) {
         midStep.push_back(v[i].getPlayoffAppearances());
     }
 
-    //sort that vector
+
     sort(midStep.begin(), midStep.end(), greater<int>());
 
-    //look through a copy of the database to assign the rest of the values in the movies to their given titles
+
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < v.size(); j++) {
             if (midStep[i] == v[j].getPlayoffAppearances()) {
@@ -396,6 +355,6 @@ void SimulationDB::sortOdds(vector<Team> &v) {
         }
     }
 
-    //move it all to the movies vector
+
     v = sorted;
 }

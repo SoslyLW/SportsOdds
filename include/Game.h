@@ -39,8 +39,6 @@ class Game {
 
         void log5();
 
-        double ranProb;
-
     private:
         Team home, away;
         int hScore, aScore;

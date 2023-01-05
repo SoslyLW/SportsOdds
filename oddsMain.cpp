@@ -1,79 +1,47 @@
 /***
     Issues: cold simulation, SOW and OTW not separated
 
-    Thoughts: could turn the schedule and teams vectors into classes
-
 ***/
 
+// Include classes
 #include "Team.h"
 #include "Game.h"
 #include "League.h"
 #include "SimulationDB.h"
 
 int main() {
-    //League nhl;
-    League wjc;
-    //vector<Team> teamsNHL(32);
-    //vector<Game> scheduleNHL;
-
+    // Create Variables
     League nhl;
+    bool verbose = true;
 
-    //nhl.readTeams("howjc19teams.txt");
+    // Load league data from csv files
     nhl.readTeams("nhlteams.csv");
-
     nhl.readSchedule("nhlschedule.csv");
-   // nhl.printPredictSchedule();
 
+    // Calculate odds based on the games already played in the schedule
     nhl.loadFromSchedule();
     nhl.pointsAndPercentCalcs();
     nhl.refreshTeams();
+
+    // Create predictions for remaining games in schedule
     nhl.predict();
 
-    nhl.printPredictSchedule();
+    // Print info to screen if necessary
+    if (verbose) {
+        nhl.printPredictSchedule();
+        nhl.printTeams();
+    }
 
-    //nhl.outputStrengthOfScheduleToFile("nhlStrengthOfSchedule.txt");
 
-    //nhl.simulateWithPlayoffs();
-    //nhl.simulate();
-
-    nhl.printTeams();
-
+    // Create object for class that runs the Monte Carlo simulation
     SimulationDB MonteCarlo;
 
-    //MonteCarlo.simulateOne(nhl);
+    // Run Monte Carlo Simulation
     MonteCarlo.simulate(nhl);
 
+    // Print Results
     MonteCarlo.printSimulationResults();
     MonteCarlo.printSimulationResultsToFile("results.txt");
-
-
-    //nhl.printTeams();
-
-
-
-    //cout << 0;
-/*
-    wjc.readTeams("howjc19teams.txt");
-    wjc.readSchedule("howjc19schedule.txt");
-
-    //cout << 1;
-
-    wjc.loadFromSchedule();
-    wjc.pointsAndPercentCalcs();
-    wjc.refreshTeams();
-    wjc.predict();
-
-    //wjc.playoffCut();
-    wjc.printTeams();
-    wjc.printPredictSchedule();
-
-    //wjc.simulate();
-    wjc.simulateWithPlayoffs();
-
-    cout << endl << endl;
-
-    wjc.printTeams();*/
-
 
     return 0;
 }

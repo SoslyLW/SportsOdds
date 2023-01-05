@@ -3,23 +3,12 @@
 
 #include "League.h"
 
-//const int numTrials = 10;
-
-//auto randomNumber = bind(dis, generator);
-
-class SimulationDB: League
-{
+class SimulationDB {
     public:
         SimulationDB();
         void simulateOne(League league);
         void simulate(League league);
 
-        void standingsSort();
-        void sortPoints();
-        void sortGamesPlayed();
-        void sortROW();
-        void sortDifferential();
-        void sortPyth();
         void standingsSort(vector<Team> &v);
         void sortPoints(vector<Team> &v);
         void sortGamesPlayed(vector<Team> &v);
@@ -32,10 +21,6 @@ class SimulationDB: League
         void printSimulationResults();
 
         void printSimulationResultsToFile(string filename);
-
-        //float randomNumber();
-        float prediction;
-        float predictionChange;
 
     private:
         vector<League> seasons;

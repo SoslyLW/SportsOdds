@@ -32,8 +32,7 @@ class Team {
         void setGoalsAgainst(int n) { ga = n; };
         int getPoints() { return pts; };
         void setPoints(int n) { pts = n; };
-        int getStanding() { return standing; };
-        void setStanding(int n) { standing = n; };
+
         string getName() { return name; };
         void setName(string s) { name = s; };
         string getTSN() { return tsn; };
@@ -49,6 +48,7 @@ class Team {
         float getExponent() { return exponent; };
         void setExponent(float n) { exponent = n; };
         void calcExponent();
+
         void setPlayoffs(bool t) { inPlayoffs = t; };
         bool getPlayoffStatus() { return inPlayoffs; };
         void addPlayoffAppearance() { timesInPlayoffs += 1; };
@@ -57,22 +57,15 @@ class Team {
         int getOneFinishingPosition(int i) { return finishingPositions[i]; };
         void incrementOneFinishingPosition(int p) { finishingPositions[p] += 1; };
         void incrementOneChampionship() { championships += 1; };
-        int getChampionships() { return championships; };
-        float getGFPG() { return gfpg; };
-        float getGAPG() { return gapg; };
-
-        void calcAverages();
-
-        vector<int> finishingPositions;
 
     private:
         int w, l, otl, otw, t, gp, gf, ga, pts;
         string name, tsn;
-        float winpct, exponent, gfpg, gapg;
-        int standing;
+        float winpct, exponent;
 
         int conference, division;
         int timesInPlayoffs, championships;
+        vector<int> finishingPositions;
         bool inPlayoffs;
 };
 

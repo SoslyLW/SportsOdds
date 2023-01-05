@@ -29,13 +29,8 @@ Team::Team() {
 }
 
 void Team::calcExponent() {
-    //exponent = pow((gf + ga) / gp, 0.287);
+    exponent = pow((gf + ga) / gp, 0.287);
 //    cout << exponent << gf << ga << "=";
 
-    exponent = 1.927;
-}
-
-void Team::calcAverages() {
-    gfpg = float (gf) / gp;
-    gapg = float (ga) / gp;
+    //exponent = 1.927;
 }
