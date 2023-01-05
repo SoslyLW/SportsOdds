@@ -33,28 +33,37 @@ void SimulationDB::simulateOne(League league) {
     //predictionChange = randomNumber();
 
     for (int i = 0; i < league.sched.size(); i++) {
-            prediction += predictionChange;
-            if (prediction > 1) {
-                prediction--;
-            }
+//            prediction += predictionChange;
+//            if (prediction > 1) {
+//                prediction--;
+//            }
 
-        //float prediction = rand() / RAND_MAX;
+        float prediction = (float) rand() / RAND_MAX;
         //cout << prediction << " ";
 
         if (!league.sched[i].getPlayed()) {
             //float prediction = randomNumber();
             league.sched[i].setPlayed(true);
+            league.sched[i].ranProb = prediction;
 
-            //Need to capture probability of going into overtime
-            //Say 20% of games go into OT, then within 10% on either side counts as an OT win
-            if (league.sched[i].getProb() <= prediction) {
+            // 23% of games go into overtime so if prediction is within 0.115 then count the game as having gone to overtime
+            if (prediction <= league.sched[i].getProb()) {
                 // Home team won
                 league.sched[i].setHomeScore(1);
                 league.sched[i].setAwayScore(0);
+
+                if (prediction > (league.sched[i].getProb() - 0.115)) {
+                    league.sched[i].setOT(true);
+                }
+
             } else {
                 // Away team won
                 league.sched[i].setHomeScore(0);
                 league.sched[i].setAwayScore(1);
+
+                if (prediction < (league.sched[i].getProb() + 0.115)) {
+                    league.sched[i].setOT(true);
+                }
             }
         }
     }
@@ -71,6 +80,7 @@ void SimulationDB::simulateOne(League league) {
     for (int i = 0; i < league.teams.size(); i++) {
         int conf = league.teams[i].getConference();
         int div = league.teams[i].getDivision();
+        bool playoffsFull = false;
 
         //determine which counters to increment
         switch (conf) {
@@ -82,11 +92,13 @@ void SimulationDB::simulateOne(League league) {
 
         if (westCounter > 8) {
             westCounter--;
-            break;
+            //break;
+            playoffsFull = true;
         }
         if (eastCounter > 8) {
             eastCounter--;
-            break;
+            //break;
+            playoffsFull = true;
         }
 
         switch (div) {
@@ -102,31 +114,40 @@ void SimulationDB::simulateOne(League league) {
 
         if (atlCounter > 5) {
             atlCounter--;
-            break;
+//            break;
+            playoffsFull = true;
         }
         if (metCounter > 5) {
             metCounter--;
-            break;
+            //break;
+            playoffsFull = true;
         }
         if (cenCounter > 5) {
             cenCounter--;
-            break;
+            //break;
+            playoffsFull = true;
         }
         if (pacCounter > 5) {
             pacCounter--;
-            break;
+            //break;
+            playoffsFull = true;
         }
 
 
         //Find matching team
         for (int j = 0; j < teamResults.size(); j++) {
             if (teamResults[j].getName() == league.teams[i].getName()) {
-                teamResults[j].addPlayoffAppearance();
+                if (!playoffsFull) {
+                    teamResults[j].addPlayoffAppearance();
+                }
+                teamResults[j].finishingPositions[i] += 1;
                 //cout << "added ";
                 break;
             }
         }
     }
+
+    //Could add option to track average finishing position here
 
 
 
@@ -144,10 +165,14 @@ void SimulationDB::simulateOne(League league) {
     /*if (league.teams[0].getTSN() == "OTT") {
         cout << "OTT" << endl;
     }*/
+
+    //league.printTeamSchedule("Montreal Canadiens");
 }
 
 void SimulationDB::simulate(League league) {
     teamResults = league.teams;
+
+    cout << "Simulating " << trials << " trials...." << endl;
 
     for (int i = 0; i < trials; i++) {
         if ((i + 1) % 10000 == 0) {
@@ -159,17 +184,50 @@ void SimulationDB::simulate(League league) {
 }
 
 void SimulationDB::printSimulationResults() {
-    //sortOdds(teamResults);
-    sortPyth(teamResults);
+    sortOdds(teamResults);
+//    sortPyth(teamResults);
     for (int i = 0; i < teamResults.size(); i++) {
+        long int sumFinishes = 0;
+
+        //Calculate Average finishing position
+        for (int j = 0; j < 32; j++) {
+            sumFinishes += (teamResults[i].finishingPositions[j] * (j + 1));
+        }
+
         cout << i + 1 << ":" << endl;
         cout << teamResults[i].getTSN() << " - " << teamResults[i].getName() << endl
              << "W: " << teamResults[i].getWins() << " L: " << teamResults[i].getLosses() << " OTL: " << teamResults[i].getOTL() << endl
              << "Pts: " << teamResults[i].getPoints() << " GP: " << teamResults[i].getGamesPlayed() << endl
              << "GF: " << teamResults[i].getGoalsFor() << " GA: " << teamResults[i].getGoalsAgainst() << " Pyt: " << teamResults[i].getWinPct() << " Exp: " << teamResults[i].getExponent() << endl
              << "Playoff Appearances: " << teamResults[i].getPlayoffAppearances() << " Playoff Odds: " << float (teamResults[i].getPlayoffAppearances()) / trials * 100.0 << endl
+             << "Average Finish: " << (float) sumFinishes / trials << endl
              << endl;
     }
+}
+
+void SimulationDB::printSimulationResultsToFile(string filename) {
+    ofstream f(filename);
+    sortOdds(teamResults);
+//    sortPyth(teamResults);
+    for (int i = 0; i < teamResults.size(); i++) {
+        long int sumFinishes = 0;
+
+        //Calculate Average finishing position
+        for (int j = 0; j < 32; j++) {
+            sumFinishes += (teamResults[i].finishingPositions[j] * (j + 1));
+        }
+
+        f << i + 1 << ":" << endl;
+        f << teamResults[i].getTSN() << " - " << teamResults[i].getName() << endl
+             << "W: " << teamResults[i].getWins() << " L: " << teamResults[i].getLosses() << " OTL: " << teamResults[i].getOTL() << endl
+             << "Pts: " << teamResults[i].getPoints() << " GP: " << teamResults[i].getGamesPlayed() << endl
+             << "GF: " << teamResults[i].getGoalsFor() << " GA: " << teamResults[i].getGoalsAgainst() << " Pyt: " << teamResults[i].getWinPct() << " Exp: " << teamResults[i].getExponent() << endl
+             << "Playoff Appearances: " << teamResults[i].getPlayoffAppearances() << " Playoff Odds: " << float (teamResults[i].getPlayoffAppearances()) / trials * 100.0 << endl
+             << "Average Finish: " << (float) sumFinishes / trials << endl
+             << endl;
+    }
+
+    f.close();
 }
 
 void SimulationDB::standingsSort(vector<Team> &v) {

@@ -20,7 +20,7 @@ Team::Team() {
     division = 0;
 
     ///fixed value
-    vector<int> v(10, 0);
+    vector<int> v(32, 0);
     finishingPositions = v;
 
     timesInPlayoffs = 0;
@@ -29,8 +29,10 @@ Team::Team() {
 }
 
 void Team::calcExponent() {
-    exponent = pow((gf + ga) / gp, 0.287);
+    //exponent = pow((gf + ga) / gp, 0.287);
 //    cout << exponent << gf << ga << "=";
+
+    exponent = 1.927;
 }
 
 void Team::calcAverages() {

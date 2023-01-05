@@ -19,7 +19,7 @@
 
 using namespace std;
 
-const int trials = 10000;
+const int trials = 150000;
 
 class League
 {
@@ -47,6 +47,10 @@ class League
         void printTeams(vector<Team> &v);
         void printPredictSchedule();
         void printPredictSchedule(vector<Game> &v);
+
+        void printTeamSchedule(string teamName);
+
+        void outputStrengthOfScheduleToFile(string filename);
 
         void simulate();
         void simulateWithPlayoffs();

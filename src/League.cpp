@@ -205,6 +205,25 @@ void League::pointsAndPercentCalcs() {
     }
 }
 
+void League::outputStrengthOfScheduleToFile(string filename) {
+    ofstream f(filename);
+
+    for (int i = 0; i < teams.size(); i++) {
+        float sos = 0;
+        for (int j = 0; j < sched.size(); j++) {
+            if (sched[j].getHomeTeam().getName() == teams[i].getName()) {
+                sos += sched[j].getProb();
+            } else if (sched[j].getAwayTeam().getName() == teams[i].getName()) {
+                sos += (1.0 - sched[j].getProb());
+            }
+        }
+
+        f << teams[i].getTSN() << ": " << sos << endl;
+    }
+
+    f.close();
+}
+
 float League::getWinPct(Team t) {
     float winPct = 0.5;
     if (t.getGamesPlayed() > 0) {
@@ -253,6 +272,18 @@ void League::printPredictSchedule() {
             cout << sched[i].getHomeTeam().getTSN() << " " << sched[i].getHomeScore() << " - " << sched[i].getAwayScore() << " " << sched[i].getAwayTeam().getTSN() << endl;
         } else {
             cout << sched[i].getHomeTeam().getTSN() << " " << sched[i].getProb() << " " << sched[i].getAwayTeam().getTSN() << endl;
+        }
+    }
+}
+
+void League::printTeamSchedule(string teamName) {
+    for (int i = 0; i < sched.size(); i++) {
+        if (sched[i].getHomeTeam().getName() == teamName || sched[i].getAwayTeam().getName() == teamName) {
+            if (sched[i].getPlayed()) {
+                cout << sched[i].getHomeTeam().getTSN() << " " << sched[i].getHomeScore() << " - " << sched[i].getAwayScore() << " " << sched[i].getAwayTeam().getTSN() << " " << sched[i].getProb() << " " << sched[i].ranProb << endl;
+            } else {
+                cout << sched[i].getHomeTeam().getTSN() << " " << sched[i].getProb() << " " << sched[i].getAwayTeam().getTSN() << endl;
+            }
         }
     }
 }

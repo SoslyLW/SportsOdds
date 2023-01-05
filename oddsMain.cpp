@@ -31,6 +31,8 @@ int main() {
 
     nhl.printPredictSchedule();
 
+    //nhl.outputStrengthOfScheduleToFile("nhlStrengthOfSchedule.txt");
+
     //nhl.simulateWithPlayoffs();
     //nhl.simulate();
 
@@ -42,6 +44,7 @@ int main() {
     MonteCarlo.simulate(nhl);
 
     MonteCarlo.printSimulationResults();
+    MonteCarlo.printSimulationResultsToFile("results.txt");
 
 
     //nhl.printTeams();

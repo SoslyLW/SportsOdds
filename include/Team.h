@@ -63,6 +63,8 @@ class Team {
 
         void calcAverages();
 
+        vector<int> finishingPositions;
+
     private:
         int w, l, otl, otw, t, gp, gf, ga, pts;
         string name, tsn;
@@ -70,7 +72,6 @@ class Team {
         int standing;
 
         int conference, division;
-        vector<int> finishingPositions;
         int timesInPlayoffs, championships;
         bool inPlayoffs;
 };

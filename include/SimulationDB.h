@@ -31,6 +31,8 @@ class SimulationDB: League
 
         void printSimulationResults();
 
+        void printSimulationResultsToFile(string filename);
+
         //float randomNumber();
         float prediction;
         float predictionChange;
