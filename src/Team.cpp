@@ -24,13 +24,11 @@ Team::Team() {
     finishingPositions = v;
 
     timesInPlayoffs = 0;
-    championships = 0;
-    inPlayoffs = false;
 }
 
 void Team::calcExponent() {
     exponent = pow((gf + ga) / gp, 0.287);
-//    cout << exponent << gf << ga << "=";
 
+    //alternatively determined exponent by studies
     //exponent = 1.927;
 }

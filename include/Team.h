@@ -49,14 +49,14 @@ class Team {
         void setExponent(float n) { exponent = n; };
         void calcExponent();
 
-        void setPlayoffs(bool t) { inPlayoffs = t; };
-        bool getPlayoffStatus() { return inPlayoffs; };
+//        void setPlayoffs(bool t) { inPlayoffs = t; };
+//        bool getPlayoffStatus() { return inPlayoffs; };
         void addPlayoffAppearance() { timesInPlayoffs += 1; };
         int getPlayoffAppearances() { return timesInPlayoffs; };
         vector<int> getFinishingPositions() { return finishingPositions; };
         int getOneFinishingPosition(int i) { return finishingPositions[i]; };
         void incrementOneFinishingPosition(int p) { finishingPositions[p] += 1; };
-        void incrementOneChampionship() { championships += 1; };
+//        void incrementOneChampionship() { championships += 1; };
 
     private:
         int w, l, otl, otw, t, gp, gf, ga, pts;
@@ -64,9 +64,8 @@ class Team {
         float winpct, exponent;
 
         int conference, division;
-        int timesInPlayoffs, championships;
+        int timesInPlayoffs;
         vector<int> finishingPositions;
-        bool inPlayoffs;
 };
 
 #endif // TEAM_H

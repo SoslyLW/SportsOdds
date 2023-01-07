@@ -19,7 +19,7 @@
 
 using namespace std;
 
-const int trials = 50;
+const int trials = 100;
 
 class League
 {
@@ -33,7 +33,6 @@ class League
         void pointsAndPercentCalcs();
         float getWinPct(Team t);
         void refreshTeams();
-        void calcLeagueAverages();
 
         void predict();
 

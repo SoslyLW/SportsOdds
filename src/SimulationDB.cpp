@@ -274,7 +274,7 @@ void SimulationDB::sortROW(vector<Team> &v) {
         }
     }
 
-    //move it all to the vector
+
     v = sorted;
 }
 

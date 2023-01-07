@@ -14,7 +14,7 @@ int main() {
     League nhl;
     bool verbose = true;
 
-    // Load league data from csv files
+    // Load league data from csv files (Data provided by Sports Reference https://www.hockey-reference.com/leagues/NHL_2023_games.html)
     nhl.readTeams("nhlteams.csv");
     nhl.readSchedule("nhlschedule.csv");
 

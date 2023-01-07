@@ -373,7 +373,7 @@ void League::sortROW() {
         }
     }
 
-    //move it all to the vector
+
     teams = sorted;
 }
 

@@ -1,0 +1,256 @@
+1:
+BOS - Boston Bruins
+W: 29 L: 4 OTL: 4
+Pts: 62 GP: 37
+GF: 140 GA: 83 Pyt: 0.705642 Exp: 1.67236
+Playoff Appearances: 600000 Playoff Odds: 100
+Average Finish: 1.00109
+
+2:
+DAL - Dallas Stars
+W: 23 L: 10 OTL: 6
+Pts: 52 GP: 39
+GF: 139 GA: 107 Pyt: 0.607679 Exp: 1.67236
+Playoff Appearances: 599996 Playoff Odds: 99.9993
+Average Finish: 4.5448
+
+3:
+VGK - Vegas Golden Knights
+W: 26 L: 12 OTL: 2
+Pts: 54 GP: 40
+GF: 134 GA: 113 Pyt: 0.570786 Exp: 1.67236
+Playoff Appearances: 599986 Playoff Odds: 99.9977
+Average Finish: 5.2996
+
+4:
+CAR - Carolina Hurricanes
+W: 25 L: 7 OTL: 6
+Pts: 56 GP: 38
+GF: 121 GA: 99 Pyt: 0.578955 Exp: 1.5871
+Playoff Appearances: 599969 Playoff Odds: 99.9948
+Average Finish: 3.22781
+
+5:
+TOR - Toronto Maple Leafs
+W: 23 L: 8 OTL: 7
+Pts: 53 GP: 38
+GF: 130 GA: 100 Pyt: 0.607965 Exp: 1.67236
+Playoff Appearances: 599870 Playoff Odds: 99.9783
+Average Finish: 3.94328
+
+6:
+WPG - Winnipeg Jets
+W: 24 L: 13 OTL: 1
+Pts: 49 GP: 38
+GF: 121 GA: 97 Pyt: 0.58683 Exp: 1.5871
+Playoff Appearances: 599829 Playoff Odds: 99.9715
+Average Finish: 7.23777
+
+7:
+TBL - Tampa Bay Lightning
+W: 24 L: 11 OTL: 1
+Pts: 49 GP: 36
+GF: 130 GA: 103 Pyt: 0.596122 Exp: 1.67236
+Playoff Appearances: 595061 Playoff Odds: 99.1768
+Average Finish: 6.53634
+
+8:
+NJD - New Jersey Devils
+W: 23 L: 11 OTL: 3
+Pts: 49 GP: 37
+GF: 124 GA: 97 Pyt: 0.596221 Exp: 1.5871
+Playoff Appearances: 593565 Playoff Odds: 98.9275
+Average Finish: 6.90906
+
+9:
+LAK - Los Angeles Kings
+W: 22 L: 13 OTL: 6
+Pts: 50 GP: 41
+GF: 135 GA: 140 Pyt: 0.4848 Exp: 1.67236
+Playoff Appearances: 579884 Playoff Odds: 96.6473
+Average Finish: 12.5196
+
+10:
+MIN - Minnesota Wild
+W: 21 L: 13 OTL: 2
+Pts: 44 GP: 36
+GF: 116 GA: 102 Pyt: 0.553567 Exp: 1.67236
+Playoff Appearances: 576192 Playoff Odds: 96.032
+Average Finish: 12.7122
+
+11:
+SEA - Seattle Kraken
+W: 20 L: 12 OTL: 4
+Pts: 44 GP: 36
+GF: 126 GA: 117 Pyt: 0.530944 Exp: 1.67236
+Playoff Appearances: 570771 Playoff Odds: 95.1285
+Average Finish: 13.0548
+
+12:
+WSH - Washington Capitals
+W: 21 L: 13 OTL: 6
+Pts: 48 GP: 40
+GF: 131 GA: 113 Pyt: 0.561485 Exp: 1.67236
+Playoff Appearances: 514142 Playoff Odds: 85.6903
+Average Finish: 10.6883
+
+13:
+NYR - New York Rangers
+W: 21 L: 12 OTL: 6
+Pts: 48 GP: 39
+GF: 127 GA: 108 Pyt: 0.567342 Exp: 1.67236
+Playoff Appearances: 512456 Playoff Odds: 85.4093
+Average Finish: 10.6878
+
+14:
+COL - Colorado Avalanche
+W: 19 L: 14 OTL: 3
+Pts: 41 GP: 36
+GF: 107 GA: 104 Pyt: 0.511282 Exp: 1.5871
+Playoff Appearances: 433263 Playoff Odds: 72.2105
+Average Finish: 16.4952
+
+15:
+CGY - Calgary Flames
+W: 18 L: 14 OTL: 7
+Pts: 43 GP: 39
+GF: 119 GA: 118 Pyt: 0.503528 Exp: 1.67236
+Playoff Appearances: 407665 Playoff Odds: 67.9442
+Average Finish: 16.8996
+
+16:
+NYI - New York Islanders
+W: 22 L: 15 OTL: 2
+Pts: 46 GP: 39
+GF: 126 GA: 106 Pyt: 0.568153 Exp: 1.5871
+Playoff Appearances: 379332 Playoff Odds: 63.222
+Average Finish: 12.8385
+
+17:
+EDM - Edmonton Oilers
+W: 20 L: 17 OTL: 2
+Pts: 42 GP: 39
+GF: 138 GA: 132 Pyt: 0.518576 Exp: 1.67236
+Playoff Appearances: 367927 Playoff Odds: 61.3212
+Average Finish: 17.3878
+
+18:
+PIT - Pittsburgh Penguins
+W: 19 L: 12 OTL: 6
+Pts: 44 GP: 37
+GF: 122 GA: 111 Pyt: 0.539424 Exp: 1.67236
+Playoff Appearances: 314742 Playoff Odds: 52.457
+Average Finish: 13.6305
+
+19:
+BUF - Buffalo Sabres
+W: 19 L: 15 OTL: 2
+Pts: 40 GP: 36
+GF: 143 GA: 122 Pyt: 0.568964 Exp: 1.74801
+Playoff Appearances: 75351 Playoff Odds: 12.5585
+Average Finish: 17.1042
+
+20:
+NSH - Nashville Predators
+W: 16 L: 14 OTL: 6
+Pts: 38 GP: 36
+GF: 100 GA: 110 Pyt: 0.462255 Exp: 1.5871
+Playoff Appearances: 37992 Playoff Odds: 6.332
+Average Finish: 21.9453
+
+21:
+STL - St. Louis Blues
+W: 18 L: 17 OTL: 3
+Pts: 39 GP: 38
+GF: 120 GA: 140 Pyt: 0.435906 Exp: 1.67236
+Playoff Appearances: 23528 Playoff Odds: 3.92133
+Average Finish: 22.572
+
+22:
+DET - Detroit Red Wings
+W: 16 L: 12 OTL: 7
+Pts: 39 GP: 35
+GF: 110 GA: 117 Pyt: 0.474229 Exp: 1.67236
+Playoff Appearances: 6849 Playoff Odds: 1.1415
+Average Finish: 20.6662
+
+23:
+OTT - Ottawa Senators
+W: 18 L: 17 OTL: 3
+Pts: 39 GP: 38
+GF: 116 GA: 116 Pyt: 0.5 Exp: 1.67236
+Playoff Appearances: 4838 Playoff Odds: 0.806333
+Average Finish: 20.872
+
+24:
+VAN - Vancouver Canucks
+W: 16 L: 18 OTL: 3
+Pts: 35 GP: 37
+GF: 126 GA: 144 Pyt: 0.44191 Exp: 1.74801
+Playoff Appearances: 2829 Playoff Odds: 0.4715
+Average Finish: 24.4221
+
+25:
+FLA - Florida Panthers
+W: 17 L: 18 OTL: 4
+Pts: 38 GP: 39
+GF: 129 GA: 134 Pyt: 0.484106 Exp: 1.67236
+Playoff Appearances: 360 Playoff Odds: 0.06
+Average Finish: 22.9118
+
+26:
+ARZ - Arizona Coyotes
+W: 13 L: 18 OTL: 5
+Pts: 31 GP: 36
+GF: 105 GA: 133 Pyt: 0.402436 Exp: 1.67236
+Playoff Appearances: 37 Playoff Odds: 0.00616667
+Average Finish: 26.8688
+
+27:
+PHI - Philadelphia Flyers
+W: 14 L: 17 OTL: 7
+Pts: 35 GP: 38
+GF: 102 GA: 125 Pyt: 0.420012 Exp: 1.5871
+Playoff Appearances: 2 Playoff Odds: 0.000333333
+Average Finish: 25.9793
+
+28:
+SJS - San Jose Sharks
+W: 12 L: 20 OTL: 7
+Pts: 31 GP: 39
+GF: 120 GA: 146 Pyt: 0.418734 Exp: 1.67236
+Playoff Appearances: 1 Playoff Odds: 0.000166667
+Average Finish: 27.9516
+
+29:
+MTL - Montreal Canadiens
+W: 15 L: 20 OTL: 3
+Pts: 33 GP: 38
+GF: 103 GA: 144 Pyt: 0.363459 Exp: 1.67236
+Playoff Appearances: 0 Playoff Odds: 0
+Average Finish: 28.1278
+
+30:
+CBJ - Columbus Blue Jackets
+W: 11 L: 23 OTL: 2
+Pts: 24 GP: 36
+GF: 94 GA: 142 Pyt: 0.334055 Exp: 1.67236
+Playoff Appearances: 0 Playoff Odds: 0
+Average Finish: 30.3831
+
+31:
+ANA - Anaheim Ducks
+W: 10 L: 24 OTL: 4
+Pts: 24 GP: 38
+GF: 88 GA: 158 Pyt: 0.273138 Exp: 1.67236
+Playoff Appearances: 0 Playoff Odds: 0
+Average Finish: 30.9487
+
+32:
+CHI - Chicago Blackhawks
+W: 8 L: 25 OTL: 4
+Pts: 20 GP: 37
+GF: 80 GA: 141 Pyt: 0.289161 Exp: 1.5871
+Playoff Appearances: 0 Playoff Odds: 0
+Average Finish: 31.6333
+
