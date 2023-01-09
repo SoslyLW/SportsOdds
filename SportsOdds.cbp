@@ -35,15 +35,13 @@
 		</Compiler>
 		<Unit filename="include/Game.h" />
 		<Unit filename="include/League.h" />
+		<Unit filename="include/SimulationDB.h" />
 		<Unit filename="include/Team.h" />
 		<Unit filename="oddsMain.cpp" />
 		<Unit filename="src/Game.cpp" />
 		<Unit filename="src/League.cpp" />
+		<Unit filename="src/SimulationDB.cpp" />
 		<Unit filename="src/Team.cpp" />
-		<Extensions>
-			<code_completion />
-			<envvars />
-			<debugger />
-		</Extensions>
+		<Extensions />
 	</Project>
 </CodeBlocks_project_file>

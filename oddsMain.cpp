@@ -12,7 +12,7 @@
 int main() {
     // Create Variables
     League nhl;
-    bool verbose = true;
+    char verbose;
 
     // Load league data from csv files (Data provided by Sports Reference https://www.hockey-reference.com/leagues/NHL_2023_games.html)
     nhl.readTeams("nhlteams.csv");
@@ -26,8 +26,14 @@ int main() {
     // Create predictions for remaining games in schedule
     nhl.predict();
 
+
+    // Ask user for input
+    cout << "Verbose? [y/n]: ";
+    cin >> verbose;
+
+
     // Print info to screen if necessary
-    if (verbose) {
+    if (verbose == 'y' || verbose == 'Y') {
         nhl.printPredictSchedule();
         nhl.printTeams();
     }

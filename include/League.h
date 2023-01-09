@@ -19,7 +19,7 @@
 
 using namespace std;
 
-const int trials = 100;
+const int trials = 1000;
 
 class League
 {

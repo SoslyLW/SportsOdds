@@ -51,3 +51,55 @@
 1672900233 c:\users\logan\documents\code\sportsodds\include\simulationdb.h
 	"League.h"
 
+1673135340 source:c:\users\sosly\documents\github\sportsodds\src\game.cpp
+	"Game.h"
+
+1673135340 c:\users\sosly\documents\github\sportsodds\include\game.h
+	<iostream>
+	<vector>
+	<string>
+	<cmath>
+	<fstream>
+	"Team.h"
+
+1673135340 c:\users\sosly\documents\github\sportsodds\include\team.h
+	<iostream>
+	<vector>
+	<string>
+	<cmath>
+	<fstream>
+
+1673135340 source:c:\users\sosly\documents\github\sportsodds\src\league.cpp
+	"League.h"
+
+1673136503 c:\users\sosly\documents\github\sportsodds\include\league.h
+	<iostream>
+	<string>
+	<vector>
+	<fstream>
+	<sstream>
+	<utility>
+	<algorithm>
+	<functional>
+	<cmath>
+	<random>
+	<cstdlib>
+	<time.h>
+	"Team.h"
+	"Game.h"
+
+1673135340 source:c:\users\sosly\documents\github\sportsodds\src\team.cpp
+	"Team.h"
+
+1673136626 source:c:\users\sosly\documents\github\sportsodds\oddsmain.cpp
+	"Team.h"
+	"Game.h"
+	"League.h"
+	"SimulationDB.h"
+
+1673136141 c:\users\sosly\documents\github\sportsodds\include\simulationdb.h
+	"League.h"
+
+1673135340 source:c:\users\sosly\documents\github\sportsodds\src\simulationdb.cpp
+	"SimulationDB.h"
+
