@@ -9,3 +9,5 @@ conclusions. The more trials are run, the more accurate the results.
 The simulation is capable of running ~20.9 seasons/sec and has a default trial size of 1000. This can be modified in the *League.h* file.
 
 Data is acquired from [Sports Reference](https://www.hockey-reference.com/leagues/NHL_2023_games.html).
+
+Example files can be seen in the Results folder. Simulations were run with data accurate up to 2023-01-04 and the number of trials is included in the file name.
