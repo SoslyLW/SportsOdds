@@ -6,8 +6,8 @@ program simulates individual seasons of the 2022-2023 NHL season and keeps track
 combination, a technique called the [Monte Carlo method](https://en.wikipedia.org/wiki/Monte_Carlo_method) is used to extrapolate random results to meaningful 
 conclusions. The more trials are run, the more accurate the results.
 
+**Pre-ran simulations from *2023-01-04* can be found in the *Results* folder if you do not want to run an intesive 100,000+ trial simulation yourself. The number of trials for each run is indicated in the filename.**
+
 The simulation is capable of running ~20.9 seasons/sec and has a default trial size of 1000. This can be modified in the *League.h* file.
 
 Data is acquired from [Sports Reference](https://www.hockey-reference.com/leagues/NHL_2023_games.html).
-
-Example files can be seen in the Results folder. Simulations were run with data accurate up to 2023-01-04 and the number of trials is included in the file name.
