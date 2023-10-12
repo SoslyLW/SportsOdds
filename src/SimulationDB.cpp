@@ -4,13 +4,13 @@ SimulationDB::SimulationDB()
 {
     //ctor
     srand(time(NULL));
-//    random_device rd;
-//    mt19937 generator(time(0));
-//    uniform_real_distribution<> dis(0.0, 1.0);
-//    auto randomNumber = bind(dis, generator);
-//
-//    prediction = randomNumber();
-//    predictionChange = randomNumber();
+    trials = 1000;
+
+}SimulationDB::SimulationDB(int numSims)
+{
+    //ctor
+    srand(time(NULL));
+    trials = numSims;
 
 }
 
@@ -142,7 +142,6 @@ void SimulationDB::simulate(League league) {
 void SimulationDB::printSimulationResults() {
     standingsSort(teamResults);
     sortOdds(teamResults);
-//    sortPyth(teamResults);
     for (int i = 0; i < teamResults.size(); i++) {
         long int sumFinishes = 0;
 
@@ -167,7 +166,6 @@ void SimulationDB::printSimulationResultsToFile(string filename) {
 
     standingsSort(teamResults);
     sortOdds(teamResults);
-//    sortPyth(teamResults);
     for (int i = 0; i < teamResults.size(); i++) {
         long int sumFinishes = 0;
 

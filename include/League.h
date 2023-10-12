@@ -19,8 +19,6 @@
 
 using namespace std;
 
-const int trials = 1000;
-
 class League
 {
     public:
@@ -37,6 +35,7 @@ class League
         void predict();
 
         void printTeams();
+        void printTeamsWithOdds(int numSims);
         void printPredictSchedule();
 
         void printTeamSchedule(string teamName);

@@ -259,7 +259,19 @@ void League::printTeams() {
              << "W: " << teams[i].getWins() << " L: " << teams[i].getLosses() << " OTW: " << teams[i].getOTW() << " OTL: " << teams[i].getOTL() << endl
              << "Pts: " << teams[i].getPoints() << " GP: " << teams[i].getGamesPlayed() << endl
              << "GF: " << teams[i].getGoalsFor() << " GA: " << teams[i].getGoalsAgainst() << " Pyt: " << teams[i].getWinPct() << " Exp: " << teams[i].getExponent() << endl
-             << "Playoff Appearances: " << teams[i].getPlayoffAppearances() << " Playoff Odds: " << float (teams[i].getPlayoffAppearances()) / trials * 100.0 << endl
+             << endl;
+    }
+}
+
+void League::printTeamsWithOdds(int numSims) {
+    standingsSort();
+    for (int i = 0; i < teams.size(); i++) {
+        cout << i + 1 << ":" << endl;
+        cout << teams[i].getTSN() << " - " << teams[i].getName() << endl
+             << "W: " << teams[i].getWins() << " L: " << teams[i].getLosses() << " OTW: " << teams[i].getOTW() << " OTL: " << teams[i].getOTL() << endl
+             << "Pts: " << teams[i].getPoints() << " GP: " << teams[i].getGamesPlayed() << endl
+             << "GF: " << teams[i].getGoalsFor() << " GA: " << teams[i].getGoalsAgainst() << " Pyt: " << teams[i].getWinPct() << " Exp: " << teams[i].getExponent() << endl
+             << "Playoff Appearances: " << teams[i].getPlayoffAppearances() << " Playoff Odds: " << float (teams[i].getPlayoffAppearances()) / numSims * 100.0 << endl
              << endl;
     }
 }

@@ -13,6 +13,7 @@ int main() {
     // Create Variables
     League nhl;
     char verbose;
+    int numSimulations;
 
     // Load league data from csv files (Data provided by Sports Reference https://www.hockey-reference.com/leagues/NHL_2023_games.html)
     nhl.readTeams("nhlteams.csv");
@@ -30,17 +31,25 @@ int main() {
     // Ask user for input
     cout << "Verbose? [y/n]: ";
     cin >> verbose;
+    cout << "Number of trials? ";
+    cin >> numSimulations;
 
+    if (numSimulations == 0) {
+        //Set a default number of simulations
+        numSimulations = 1000;
+    }
 
     // Print info to screen if necessary
     if (verbose == 'y' || verbose == 'Y') {
         nhl.printPredictSchedule();
         nhl.printTeams();
+    } else if (verbose == 'T') {
+        //Run speed tests in future
     }
 
 
     // Create object for class that runs the Monte Carlo simulation
-    SimulationDB MonteCarlo;
+    SimulationDB MonteCarlo(numSimulations);
 
     // Run Monte Carlo Simulation
     MonteCarlo.simulate(nhl);
