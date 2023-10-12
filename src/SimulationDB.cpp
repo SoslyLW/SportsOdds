@@ -10,7 +10,11 @@ SimulationDB::SimulationDB()
 {
     //ctor
     srand(time(NULL));
-    trials = numSims;
+    if (numSims != 0) {
+        trials = numSims;
+    } else {
+        trials = 1000;
+    }
 
 }
 

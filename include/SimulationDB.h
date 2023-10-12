@@ -23,6 +23,8 @@ class SimulationDB {
 
         void printSimulationResultsToFile(string filename);
 
+        void setTrials(int numSims) { trials = numSims; };
+
     private:
         vector<League> seasons;
         vector<Team> teamResults;

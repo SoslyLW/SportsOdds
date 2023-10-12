@@ -12,7 +12,8 @@
 #include <cmath>
 #include <random>
 #include <cstdlib>
-#include <time.h>
+//#include <time.h>
+#include <ctime>
 
 #include "Team.h"
 #include "Game.h"
