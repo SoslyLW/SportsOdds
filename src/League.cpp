@@ -16,6 +16,7 @@ int League::readTeams(string filename) {
     // Read and do nothing with top row of csv
     getline(teamsFile, discard);
 
+    int index = 0;
     while (!teamsFile.eof()) {
         Team tempTeam;
         string line, temp;
@@ -42,6 +43,12 @@ int League::readTeams(string filename) {
             }
             i++;
         }
+
+        tempTeam.setIndex(index);
+        TSNToIndex[tempTeam.getTSN()] = index;
+        TSNtoOriginalIndex[tempTeam.getTSN()] = index;
+        nameToIndex[tempTeam.getName()] = index;
+        index++;
 
         teams.push_back(tempTeam);
     }
@@ -81,20 +88,11 @@ int League::readSchedule(string filename) {
         getline(s, LOG, ',');
         getline(s, notes, ',');
 
-        // Find teams associated with games
-        for (int i = 0; i < teams.size(); i++) {
-            if (teams[i].getName() == homeTeam) {
-                tempGame.setHomeTeam(teams[i]);
-                break;
-            }
-        }
-        for (int i = 0; i < teams.size(); i++) {
-            if (teams[i].getName() == awayTeam) {
-                tempGame.setAwayTeam(teams[i]);
-                break;
-            }
-        }
+        // Find teams associated with games using name map
+        tempGame.setHomeTeam(teams[nameToIndex[homeTeam]]);
+        tempGame.setAwayTeam(teams[nameToIndex[awayTeam]]);
 
+        //Record stats of games if it has been played
         if (!homeGoals.empty()) {
             tempGame.setPlayed(true);
 
@@ -110,88 +108,125 @@ int League::readSchedule(string filename) {
             }
         }
 
-
         sched.push_back(tempGame);
     }
 }
 
-void League::loadFromSchedule() {
+//Resets all variables of all Team objects to 0
+void League::resetStandings() {
+    for (int i = 0; i < teams.size(); i++) {
+        teams[i].setWins(0);
+        teams[i].setLosses(0);
+        teams[i].setOTL(0);
+        teams[i].setOTW(0);
+        teams[i].setTies(0);
+        teams[i].setGamesPlayed(0);
+        teams[i].setGoalsFor(0);
+        teams[i].setGoalsAgainst(0);
+        teams[i].setPoints(0);
+    }
+}
+
+//Resets all variables of all Team objects to the inital configuration before simulation (Only applicable if runnign SimuationDB::simulate())
+void League::resetStandingsToLoadState() {
+    for (int i = 0; i < teams.size(); i++) {
+        int originalIndex = TSNtoOriginalIndex[teams[i].getTSN()];
+
+        teams[i].setWins(originalTeamConfiguration[originalIndex].getWins());
+        teams[i].setLosses(originalTeamConfiguration[originalIndex].getLosses());
+        teams[i].setOTL(originalTeamConfiguration[originalIndex].getOTL());
+        teams[i].setOTW(originalTeamConfiguration[originalIndex].getOTW());
+        teams[i].setTies(originalTeamConfiguration[originalIndex].getTies());
+        teams[i].setGamesPlayed(originalTeamConfiguration[originalIndex].getGamesPlayed());
+        teams[i].setGoalsFor(originalTeamConfiguration[originalIndex].getGoalsFor());
+        teams[i].setGoalsAgainst(originalTeamConfiguration[originalIndex].getGoalsAgainst());
+        teams[i].setPoints(0);
+
+    }
+    pointsAndPercentCalcs();
+}
+
+void League::loadFromSchedule(bool firstTime) {
+    if (!firstTime) {
+        resetStandings();
+    }
     for (int i = 0; i < sched.size(); i++) {
         // If game has not been played, no need to record stats
         if (!sched[i].getPlayed()) {
             continue;
         }
 
-        //Find home team using name (not using pointers to array) and the calculate wins/losses
-        for (int j = 0; j < teams.size(); j++) {
-            if (sched[i].getHomeTeam().getTSN() == teams[j].getTSN()) {
-                sched[i].setHomeTeam(teams[j]);
+        //Get index of home team using the map
+        int j = TSNToIndex[sched[i].getHomeTeam().getTSN()];
 
-                if (sched[i].getHomeScore() > sched[i].getAwayScore()) {
-                    /*if (sched[i].getOT()) {
-                        teams[j].setOTW(teams[j].getOTW() + 1);
-                    } else {
-                        teams[j].setWins(teams[j].getWins() + 1);
-                    }*/
+        //Add stats to home team based on game result
+        sched[i].setHomeTeam(teams[j]);
 
-                    teams[j].setWins(teams[j].getWins() + 1);
-                } else {
-                    if (sched[i].getOT()) {
-                        teams[j].setOTL(teams[j].getOTL() + 1);
-                    } else {
-                        teams[j].setLosses(teams[j].getLosses() + 1);
-                    }
-                }
-                teams[j].setGamesPlayed(teams[j].getGamesPlayed() + 1);
-                teams[j].setGoalsFor(teams[j].getGoalsFor() + sched[i].getHomeScore());
-                teams[j].setGoalsAgainst(teams[j].getGoalsAgainst() + sched[i].getAwayScore());
-                break;
+        if (sched[i].getHomeScore() > sched[i].getAwayScore()) {
+            /*if (sched[i].getOT()) {
+                teams[j].setOTW(teams[j].getOTW() + 1);
+            } else {
+                teams[j].setWins(teams[j].getWins() + 1);
+            }*/
+
+            teams[j].setWins(teams[j].getWins() + 1);
+        } else {
+            if (sched[i].getOT()) {
+                teams[j].setOTL(teams[j].getOTL() + 1);
+            } else {
+                teams[j].setLosses(teams[j].getLosses() + 1);
             }
         }
+        teams[j].setGamesPlayed(teams[j].getGamesPlayed() + 1);
+        teams[j].setGoalsFor(teams[j].getGoalsFor() + sched[i].getHomeScore());
+        teams[j].setGoalsAgainst(teams[j].getGoalsAgainst() + sched[i].getAwayScore());
 
-        for (int j = 0; j < teams.size(); j++) {
-            if (sched[i].getAwayTeam().getTSN() == teams[j].getTSN()) {
-                sched[i].setAwayTeam(teams[j]);
+        //Get index of away team using map
+        j = TSNToIndex[sched[i].getAwayTeam().getTSN()];
 
-                if (sched[i].getAwayScore() > sched[i].getHomeScore()) {
-                    /*if (sched[i].getOT()) {
-                        teams[j].setOTW(teams[j].getOTW() + 1);
-                    } else {
-                        teams[j].setWins(teams[j].getWins() + 1);
-                    }*/
+        //Record away team stats
+        sched[i].setAwayTeam(teams[j]);
 
-                    teams[j].setWins(teams[j].getWins() + 1);
-                } else {
-                    if (sched[i].getOT()) {
-                        teams[j].setOTL(teams[j].getOTL() + 1);
-                    } else {
-                        teams[j].setLosses(teams[j].getLosses() + 1);
-                    }
-                }
-                teams[j].setGamesPlayed(teams[j].getGamesPlayed() + 1);
-                teams[j].setGoalsFor(teams[j].getGoalsFor() + sched[i].getAwayScore());
-                teams[j].setGoalsAgainst(teams[j].getGoalsAgainst() + sched[i].getHomeScore());
-                break;
+        if (sched[i].getAwayScore() > sched[i].getHomeScore()) {
+            /*if (sched[i].getOT()) {
+                teams[j].setOTW(teams[j].getOTW() + 1);
+            } else {
+                teams[j].setWins(teams[j].getWins() + 1);
+            }*/
+
+            teams[j].setWins(teams[j].getWins() + 1);
+        } else {
+            if (sched[i].getOT()) {
+                teams[j].setOTL(teams[j].getOTL() + 1);
+            } else {
+                teams[j].setLosses(teams[j].getLosses() + 1);
             }
         }
+        teams[j].setGamesPlayed(teams[j].getGamesPlayed() + 1);
+        teams[j].setGoalsFor(teams[j].getGoalsFor() + sched[i].getAwayScore());
+        teams[j].setGoalsAgainst(teams[j].getGoalsAgainst() + sched[i].getHomeScore());
+    }
+}
+
+//Gets the intial loaded standings for all Teams and records the intial positioning of the teams vector to create a map
+void League::GrabInitialTeamConfiguration() {
+    originalTeamConfiguration = vector<Team>(teams);
+
+    for (int i = 0; i < teams.size(); i++) {
+        TSNtoOriginalIndex[teams[i].getTSN()] = i;
     }
 }
 
 //Updates team stats for all games in schedule
 void League::refreshTeams() {
     for (int i = 0; i < sched.size(); i++) {
-        for (int j = 0; j < teams.size(); j++) {
-            if (sched[i].getHomeTeam().getTSN() == teams[j].getTSN()) {
-                sched[i].setHomeTeam(teams[j]);
-                break;
-            }
-        }
-        for (int j = 0; j < teams.size(); j++) {
-            if (sched[i].getAwayTeam().getTSN() == teams[j].getTSN()) {
-                sched[i].setAwayTeam(teams[j]);
-                break;
-            }
-        }
+        //Get home team index and set the game's home team to that Team
+        int j = TSNToIndex[sched[i].getHomeTeam().getTSN()];
+        sched[i].setHomeTeam(teams[j]);
+
+        //Get away team index and set the game's away team to that Team
+        j = TSNToIndex[sched[i].getAwayTeam().getTSN()];
+        sched[i].setAwayTeam(teams[j]);
     }
 }
 
@@ -231,11 +266,9 @@ float League::getWinPct(Team t) {
             t.setGoalsFor(1);
         }
 
-        //cout << t.getExponent() << " - " << t.getGoalsFor() << ", " << t.getGoalsAgainst() << " = ";
         winPct = (pow(t.getGoalsFor(), t.getExponent()) / (pow(t.getGoalsFor(), t.getExponent()) + pow(t.getGoalsAgainst(), t.getExponent())));
     }
 
-    //cout << winPct << endl;
     return winPct;
 }
 
@@ -259,7 +292,19 @@ void League::printTeams() {
              << "W: " << teams[i].getWins() << " L: " << teams[i].getLosses() << " OTW: " << teams[i].getOTW() << " OTL: " << teams[i].getOTL() << endl
              << "Pts: " << teams[i].getPoints() << " GP: " << teams[i].getGamesPlayed() << endl
              << "GF: " << teams[i].getGoalsFor() << " GA: " << teams[i].getGoalsAgainst() << " Pyt: " << teams[i].getWinPct() << " Exp: " << teams[i].getExponent() << endl
-             << "Playoff Appearances: " << teams[i].getPlayoffAppearances() << " Playoff Odds: " << float (teams[i].getPlayoffAppearances()) / trials * 100.0 << endl
+             << endl;
+    }
+}
+
+void League::printTeamsWithOdds(int numSims) {
+    standingsSort();
+    for (int i = 0; i < teams.size(); i++) {
+        cout << i + 1 << ":" << endl;
+        cout << teams[i].getTSN() << " - " << teams[i].getName() << endl
+             << "W: " << teams[i].getWins() << " L: " << teams[i].getLosses() << " OTW: " << teams[i].getOTW() << " OTL: " << teams[i].getOTL() << endl
+             << "Pts: " << teams[i].getPoints() << " GP: " << teams[i].getGamesPlayed() << endl
+             << "GF: " << teams[i].getGoalsFor() << " GA: " << teams[i].getGoalsAgainst() << " Pyt: " << teams[i].getWinPct() << " Exp: " << teams[i].getExponent() << endl
+             << "Playoff Appearances: " << teams[i].getPlayoffAppearances() << " Playoff Odds: " << float (teams[i].getPlayoffAppearances()) / numSims * 100.0 << endl
              << endl;
     }
 }
@@ -299,7 +344,6 @@ void League::sortPoints() {
     vector<Team> sorted(teams.size());
     vector<int> midStep;
 
-
     for (int i = 0; i < teams.size(); i++) {
         midStep.push_back(teams[i].getPoints());
     }
@@ -307,17 +351,18 @@ void League::sortPoints() {
 
     sort(midStep.begin(), midStep.end(), greater<int>());
 
-
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < teams.size(); j++) {
             if (midStep[i] == teams[j].getPoints()) {
                 sorted[i] = teams[j];
+                sorted[i].setIndex(i);
+                TSNToIndex[sorted[i].getTSN()] = i;
+                nameToIndex[sorted[i].getName()] = i;
                 teams.erase(teams.begin() + j);
                 break;
             }
         }
     }
-
 
     teams = sorted;
 }
@@ -326,25 +371,24 @@ void League::sortGamesPlayed() {
     vector<Team> sorted(teams.size());
     vector<int> midStep;
 
-
     for (int i = 0; i < teams.size(); i++) {
         midStep.push_back(teams[i].getGamesPlayed());
     }
 
-
     sort(midStep.begin(), midStep.end());
-
 
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < teams.size(); j++) {
             if (midStep[i] == teams[j].getGamesPlayed()) {
                 sorted[i] = teams[j];
+                sorted[i].setIndex(i);
+                TSNToIndex[sorted[i].getTSN()] = i;
+                nameToIndex[sorted[i].getName()] = i;
                 teams.erase(teams.begin() + j);
                 break;
             }
         }
     }
-
 
     teams = sorted;
 }
@@ -354,25 +398,24 @@ void League::sortROW() {
     vector<Team> sorted(teams.size());
     vector<int> midStep;
 
-
     for (int i = 0; i < teams.size(); i++) {
         midStep.push_back(teams[i].getWins() + teams[i].getOTW());
     }
 
-
     sort(midStep.begin(), midStep.end(), greater<int>());
-
 
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < teams.size(); j++) {
             if (midStep[i] == teams[j].getWins() + teams[j].getOTW()) {
                 sorted[i] = teams[j];
+                sorted[i].setIndex(i);
+                TSNToIndex[sorted[i].getTSN()] = i;
+                nameToIndex[sorted[i].getName()] = i;
                 teams.erase(teams.begin() + j);
                 break;
             }
         }
     }
-
 
     teams = sorted;
 }
@@ -381,25 +424,24 @@ void League::sortDifferential() {
     vector<Team> sorted(teams.size());
     vector<int> midStep;
 
-
     for (int i = 0; i < teams.size(); i++) {
         midStep.push_back(teams[i].getGoalsFor() - teams[i].getGoalsAgainst());
     }
 
-
     sort(midStep.begin(), midStep.end(), greater<int>());
-
 
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < teams.size(); j++) {
             if (midStep[i] == teams[j].getGoalsFor() - teams[j].getGoalsAgainst()) {
                 sorted[i] = teams[j];
+                sorted[i].setIndex(i);
+                TSNToIndex[sorted[i].getTSN()] = i;
+                nameToIndex[sorted[i].getName()] = i;
                 teams.erase(teams.begin() + j);
                 break;
             }
         }
     }
-
 
     teams = sorted;
 }
@@ -408,25 +450,24 @@ void League::sortPyth() {
     vector<Team> sorted(teams.size());
     vector<float> midStep;
 
-
     for (int i = 0; i < teams.size(); i++) {
         midStep.push_back(teams[i].getWinPct());
     }
 
-
     sort(midStep.begin(), midStep.end(), greater<float>());
-
 
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < teams.size(); j++) {
             if (midStep[i] == teams[j].getWinPct()) {
                 sorted[i] = teams[j];
+                sorted[i].setIndex(i);
+                TSNToIndex[sorted[i].getTSN()] = i;
+                nameToIndex[sorted[i].getName()] = i;
                 teams.erase(teams.begin() + j);
                 break;
             }
         }
     }
-
 
     teams = sorted;
 }

@@ -6,6 +6,7 @@
 class SimulationDB {
     public:
         SimulationDB();
+        SimulationDB(int numSims);
         void simulateOne(League league);
         void simulate(League league);
 
@@ -22,9 +23,13 @@ class SimulationDB {
 
         void printSimulationResultsToFile(string filename);
 
+        void setTrials(int numSims) { trials = numSims; };
+
     private:
         vector<League> seasons;
         vector<Team> teamResults;
+        vector<Team> printingTeamResults;
+        int trials;
 };
 
 #endif // SIMULATIONDB_H
