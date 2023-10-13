@@ -6,6 +6,7 @@
 #include <string>
 #include <cmath>
 #include <fstream>
+#include <map>
 
 using namespace std;
 
@@ -14,6 +15,8 @@ class Team {
         Team();
 
         //getters and setters
+        int getIndex() { return primaryIndex; };
+        void setIndex(int n) { primaryIndex = n; };
         int getWins() { return w; };
         void setWins(int n) { w = n; };
         int getLosses() { return l; };
@@ -59,6 +62,7 @@ class Team {
 //        void incrementOneChampionship() { championships += 1; };
 
     private:
+        int primaryIndex;
         int w, l, otl, otw, t, gp, gf, ga, pts;
         string name, tsn;
         float winpct, exponent;

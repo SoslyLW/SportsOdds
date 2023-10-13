@@ -12,7 +12,6 @@
 #include <cmath>
 #include <random>
 #include <cstdlib>
-//#include <time.h>
 #include <ctime>
 
 #include "Team.h"
@@ -28,7 +27,10 @@ class League
         int readTeams(string filename);
         int readSchedule(string filename);
 
-        void loadFromSchedule();
+        void resetStandings();
+        void resetStandingsToLoadState();
+        void GrabInitialTeamConfiguration();
+        void loadFromSchedule(bool firstTime = false);
         void pointsAndPercentCalcs();
         float getWinPct(Team t);
         void refreshTeams();
@@ -50,8 +52,13 @@ class League
         void sortDifferential();
         void sortPyth();
 
+        map<string, int> TSNToIndex;
+        map<string, int> TSNtoOriginalIndex;
+        map<string, int> nameToIndex;
+
         //Variables not in private to aid with speed of simulation
         vector<Team> teams;
+        vector<Team> originalTeamConfiguration;
         vector<Game> sched;
 };
 

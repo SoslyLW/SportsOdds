@@ -21,13 +21,12 @@ int main() {
     nhl.readSchedule("nhlschedule.csv");
 
     // Calculate odds based on the games already played in the schedule
-    nhl.loadFromSchedule();
+    nhl.loadFromSchedule(true);
     nhl.pointsAndPercentCalcs();
     nhl.refreshTeams();
 
     // Create predictions for remaining games in schedule
     nhl.predict();
-
 
     // Ask user for input
     cout << "Verbose? [y/n]: ";

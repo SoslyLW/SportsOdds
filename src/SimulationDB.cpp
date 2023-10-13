@@ -116,21 +116,22 @@ void SimulationDB::simulateOne(League league) {
         }
 
 
-        //Find matching team
-        for (int j = 0; j < teamResults.size(); j++) {
-            if (teamResults[j].getName() == league.teams[i].getName()) {
-                if (!playoffsFull) {
-                    teamResults[j].addPlayoffAppearance();
-                }
-                teamResults[j].incrementOneFinishingPosition(i);
-                break;
-            }
+        //Find matching team using original index map
+        int j = league.TSNtoOriginalIndex[league.teams[i].getTSN()];
+
+        //Add a playoff apperance if playoffs have not yet been filled
+        if (!playoffsFull) {
+            teamResults[j].addPlayoffAppearance();
         }
+
+        //Record final finishin position
+        teamResults[j].incrementOneFinishingPosition(i);
     }
 }
 
 void SimulationDB::simulate(League league) {
     teamResults = league.teams;
+    league.GrabInitialTeamConfiguration();
 
     cout << "Simulating " << trials << " trials...." << endl;
 
@@ -144,22 +145,24 @@ void SimulationDB::simulate(League league) {
 }
 
 void SimulationDB::printSimulationResults() {
-    standingsSort(teamResults);
-    sortOdds(teamResults);
-    for (int i = 0; i < teamResults.size(); i++) {
+    printingTeamResults = vector<Team>(teamResults);
+
+    standingsSort(printingTeamResults);
+    sortOdds(printingTeamResults);
+    for (int i = 0; i < printingTeamResults.size(); i++) {
         long int sumFinishes = 0;
 
         //Calculate Average finishing position
         for (int j = 0; j < 32; j++) {
-            sumFinishes += (teamResults[i].getOneFinishingPosition(j) * (j + 1));
+            sumFinishes += (printingTeamResults[i].getOneFinishingPosition(j) * (j + 1));
         }
 
         cout << i + 1 << ":" << endl;
-        cout << teamResults[i].getTSN() << " - " << teamResults[i].getName() << endl
-             << "W: " << teamResults[i].getWins() << " L: " << teamResults[i].getLosses() << " OTL: " << teamResults[i].getOTL() << endl
-             << "Pts: " << teamResults[i].getPoints() << " GP: " << teamResults[i].getGamesPlayed() << endl
-             << "GF: " << teamResults[i].getGoalsFor() << " GA: " << teamResults[i].getGoalsAgainst() << " Pyt: " << teamResults[i].getWinPct() << " Exp: " << teamResults[i].getExponent() << endl
-             << "Playoff Appearances: " << teamResults[i].getPlayoffAppearances() << " Playoff Odds: " << float (teamResults[i].getPlayoffAppearances()) / trials * 100.0 << endl
+        cout << printingTeamResults[i].getTSN() << " - " << printingTeamResults[i].getName() << endl
+             << "W: " << printingTeamResults[i].getWins() << " L: " << printingTeamResults[i].getLosses() << " OTL: " << printingTeamResults[i].getOTL() << endl
+             << "Pts: " << printingTeamResults[i].getPoints() << " GP: " << printingTeamResults[i].getGamesPlayed() << endl
+             << "GF: " << printingTeamResults[i].getGoalsFor() << " GA: " << printingTeamResults[i].getGoalsAgainst() << " Pyt: " << printingTeamResults[i].getWinPct() << " Exp: " << printingTeamResults[i].getExponent() << endl
+             << "Playoff Appearances: " << printingTeamResults[i].getPlayoffAppearances() << " Playoff Odds: " << float (printingTeamResults[i].getPlayoffAppearances()) / trials * 100.0 << endl
              << "Average Finish: " << (float) sumFinishes / trials << endl
              << endl;
     }
@@ -168,22 +171,24 @@ void SimulationDB::printSimulationResults() {
 void SimulationDB::printSimulationResultsToFile(string filename) {
     ofstream f(filename);
 
-    standingsSort(teamResults);
-    sortOdds(teamResults);
-    for (int i = 0; i < teamResults.size(); i++) {
+    printingTeamResults = vector<Team>(teamResults);
+
+    standingsSort(printingTeamResults);
+    sortOdds(printingTeamResults);
+    for (int i = 0; i < printingTeamResults.size(); i++) {
         long int sumFinishes = 0;
 
         //Calculate Average finishing position
         for (int j = 0; j < 32; j++) {
-            sumFinishes += (teamResults[i].getOneFinishingPosition(j) * (j + 1));
+            sumFinishes += (printingTeamResults[i].getOneFinishingPosition(j) * (j + 1));
         }
 
         f << i + 1 << ":" << endl;
-        f << teamResults[i].getTSN() << " - " << teamResults[i].getName() << endl
-             << "W: " << teamResults[i].getWins() << " L: " << teamResults[i].getLosses() << " OTL: " << teamResults[i].getOTL() << endl
-             << "Pts: " << teamResults[i].getPoints() << " GP: " << teamResults[i].getGamesPlayed() << endl
-             << "GF: " << teamResults[i].getGoalsFor() << " GA: " << teamResults[i].getGoalsAgainst() << " Pyt: " << teamResults[i].getWinPct() << " Exp: " << teamResults[i].getExponent() << endl
-             << "Playoff Appearances: " << teamResults[i].getPlayoffAppearances() << " Playoff Odds: " << float (teamResults[i].getPlayoffAppearances()) / trials * 100.0 << endl
+        f << printingTeamResults[i].getTSN() << " - " << printingTeamResults[i].getName() << endl
+             << "W: " << printingTeamResults[i].getWins() << " L: " << printingTeamResults[i].getLosses() << " OTL: " << printingTeamResults[i].getOTL() << endl
+             << "Pts: " << printingTeamResults[i].getPoints() << " GP: " << printingTeamResults[i].getGamesPlayed() << endl
+             << "GF: " << printingTeamResults[i].getGoalsFor() << " GA: " << printingTeamResults[i].getGoalsAgainst() << " Pyt: " << printingTeamResults[i].getWinPct() << " Exp: " << printingTeamResults[i].getExponent() << endl
+             << "Playoff Appearances: " << printingTeamResults[i].getPlayoffAppearances() << " Playoff Odds: " << float (printingTeamResults[i].getPlayoffAppearances()) / trials * 100.0 << endl
              << "Average Finish: " << (float) sumFinishes / trials << endl
              << endl;
     }

@@ -13,6 +13,5 @@ Game::Game() {
 
 void Game::log5() {
     //prob = (home.getWinPct() - (home.getWinPct() * away.getWinPct()))/(home.getWinPct() + away.getWinPct() - (2 * home.getWinPct() * away.getWinPct()));
-
     prob = (home.getWinPct() * (1.0 - away.getWinPct())) / ((home.getWinPct() * (1.0 - away.getWinPct())) + ((1.0 - home.getWinPct()) * away.getWinPct()));
 }

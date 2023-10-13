@@ -28,6 +28,7 @@ class SimulationDB {
     private:
         vector<League> seasons;
         vector<Team> teamResults;
+        vector<Team> printingTeamResults;
         int trials;
 };
 
