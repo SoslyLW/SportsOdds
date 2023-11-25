@@ -12,4 +12,4 @@ Performance varies by CPU *and has been vastly improved since 2023-10-13*. I was
 
 Trial size can be changed upon starting the program and defaults to 1,000 seasons if no input is received.
 
-Data is acquired from [Sports Reference](https://www.hockey-reference.com/leagues/NHL_2023_games.html).
+Data is acquired from [Sports Reference](https://www.hockey-reference.com/leagues/NHL_2024_games.html).
