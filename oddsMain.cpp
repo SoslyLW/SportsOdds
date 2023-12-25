@@ -20,7 +20,8 @@ int main() {
     if (nhl.readTeams("nhlteams.csv") == 404) {
         return 404;
     }
-    if (nhl.readSchedule("nhlschedule.csv") == 404) {
+    // if (nhl.readSchedule("2024.txt") == 404) {
+    if (nhl.readSchedule("nhlschedule2024.csv") == 404) {
         return 404;
     }
 
