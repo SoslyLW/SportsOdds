@@ -17,8 +17,12 @@ int main() {
     int numSimulations = 0;
 
     // Load league data from csv files (Data provided by Sports Reference https://www.hockey-reference.com/leagues/NHL_2023_games.html)
-    nhl.readTeams("nhlteams.csv");
-    nhl.readSchedule("nhlschedule.csv");
+    if (nhl.readTeams("nhlteams.csv") == 404) {
+        return 404;
+    }
+    if (nhl.readSchedule("nhlschedule.csv") == 404) {
+        return 404;
+    }
 
     // Calculate odds based on the games already played in the schedule
     nhl.loadFromSchedule(true);
