@@ -4,11 +4,11 @@
 ***/
 
 // Include classes
-#include "Team.h"
-#include "Game.h"
-#include "League.h"
-#include "SimulationDB.h"
-#include "SimulationTester.h"
+#include "include/Team.h"
+#include "include/Game.h"
+#include "include/League.h"
+#include "include/SimulationDB.h"
+#include "include/SimulationTester.h"
 
 int main() {
     // Create Variables

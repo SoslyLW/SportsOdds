@@ -1,4 +1,4 @@
-#include "League.h"
+#include "../include/League.h"
 
 League::League() {
     //ctor
@@ -52,6 +52,8 @@ int League::readTeams(string filename) {
 
         teams.push_back(tempTeam);
     }
+
+    return 0;
 }
 
 int League::readSchedule(string filename) {
@@ -110,6 +112,8 @@ int League::readSchedule(string filename) {
 
         sched.push_back(tempGame);
     }
+
+    return 0;
 }
 
 //Resets all variables of all Team objects to 0

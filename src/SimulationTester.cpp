@@ -1,4 +1,4 @@
-#include "SimulationTester.h"
+#include "../include/SimulationTester.h"
 
 
 SimulationTester::SimulationTester(SimulationDB sim, League league)
@@ -21,7 +21,7 @@ void SimulationTester::runTestSuite()
 {
     int trialArray[] = {100, 500, 1000, 10000};
     int n = sizeof(trialArray) / sizeof(trialArray[0]);
-    int resultsArray[n][2];
+    int resultsArray[4][2]; //Changed to support MSVC compiler
     printf("%s| Running %d tests\n", testName.c_str(), n);
 
     for (int i = 0; i < n; i++) {
