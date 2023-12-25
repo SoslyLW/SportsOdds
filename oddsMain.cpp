@@ -37,6 +37,10 @@ int main() {
     cout << "Verbose? [y/n]: ";
     cin >> verbose;
 
+    if (verbose == 'q' || verbose == 'Q') {
+        return 0;
+    }
+
     if (verbose != 'T') {
         cout << "Number of trials? ";
         cin >> numSimulations;
@@ -68,6 +72,7 @@ int main() {
     // Print Results
     MonteCarlo.printSimulationResults();
     MonteCarlo.printSimulationResultsToFile("results.txt");
+    MonteCarlo.printSimulationResultsToJSON("teamsData.json");
 
     return 0;
 }

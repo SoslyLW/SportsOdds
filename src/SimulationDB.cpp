@@ -6,7 +6,9 @@ SimulationDB::SimulationDB()
     srand(time(NULL));
     trials = 1000;
 
-}SimulationDB::SimulationDB(int numSims)
+}
+
+SimulationDB::SimulationDB(int numSims)
 {
     //ctor
     srand(time(NULL));
@@ -18,7 +20,6 @@ SimulationDB::SimulationDB()
 
 }
 
-
 void SimulationDB::simulateOne(League league) {
     ///Steps:
     // 1 - Simulate all the unplayed games
@@ -26,12 +27,11 @@ void SimulationDB::simulateOne(League league) {
     // 3 - Determine who makes the playoffs
     // 4 - Save results
 
+    float prediction;
     for (int i = 0; i < league.sched.size(); i++) {
-        float prediction = (float) rand() / RAND_MAX;
-        //cout << prediction << " ";
+        prediction = (float) rand() / RAND_MAX;
 
         if (!league.sched[i].getPlayed()) {
-            //float prediction = randomNumber();
             league.sched[i].setPlayed(true);
 
             // 22% of games go into overtime so if prediction is within 0.11 then count the game as having gone to overtime
@@ -192,6 +192,45 @@ void SimulationDB::printSimulationResultsToFile(string filename) {
              << "Average Finish: " << (float) sumFinishes / trials << endl
              << endl;
     }
+
+    f.close();
+}
+
+void SimulationDB::printSimulationResultsToJSON(string filename) {
+    ofstream f(filename);
+
+    printingTeamResults = vector<Team>(teamResults);
+
+    f << "{\n\t\"teams\": [";
+
+    standingsSort(printingTeamResults);
+    sortOdds(printingTeamResults);
+    for (int i = 0; i < printingTeamResults.size(); i++) {
+        long int sumFinishes = 0;
+
+        //Calculate Average finishing position
+        for (int j = 0; j < 32; j++) {
+            sumFinishes += (printingTeamResults[i].getOneFinishingPosition(j) * (j + 1));
+        }
+
+        f << "\n\t\t{" << endl;
+        f << "\t\t\t\"name\": \"" << printingTeamResults[i].getName() << "\"," << endl;
+        f << "\t\t\t\"gp\": " << printingTeamResults[i].getGamesPlayed() << "," << endl;
+        f << "\t\t\t\"wins\": " << printingTeamResults[i].getWins() << "," << endl;
+        f << "\t\t\t\"losses\": " << printingTeamResults[i].getLosses() << "," << endl;
+        f << "\t\t\t\"otl\": " << printingTeamResults[i].getOTL() << "," << endl;
+        f << "\t\t\t\"gf\": " << printingTeamResults[i].getGoalsFor() << "," << endl;
+        f << "\t\t\t\"ga\": " << printingTeamResults[i].getGoalsAgainst() << "," << endl;
+        f << "\t\t\t\"gd\": " << printingTeamResults[i].getGoalsFor() - printingTeamResults[i].getGoalsAgainst() << "," << endl;
+        f << "\t\t\t\"playoff_odds\": " << float (printingTeamResults[i].getPlayoffAppearances()) / trials * 100.0 << endl;
+        if (i == printingTeamResults.size() - 1) {
+            f << "\t\t}";
+        } else {
+            f << "\t\t},";
+        }
+    }
+
+    f << "\n\t]\n}";
 
     f.close();
 }
