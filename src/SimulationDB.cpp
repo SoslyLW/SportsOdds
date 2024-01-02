@@ -5,10 +5,18 @@ SimulationDB::SimulationDB()
     //ctor
     srand(time(NULL));
     trials = 1000;
-
 }
 
-SimulationDB::SimulationDB(int numSims)
+
+SimulationDB::SimulationDB(League l)
+{
+    //ctor
+    srand(time(NULL));
+    trials = 1000;
+    baseLeague = l;
+}
+
+SimulationDB::SimulationDB(League l, int numSims)
 {
     //ctor
     srand(time(NULL));
@@ -18,6 +26,7 @@ SimulationDB::SimulationDB(int numSims)
         trials = 1000;
     }
 
+    baseLeague = l;
 }
 
 void SimulationDB::simulateOne(League league) {
@@ -394,6 +403,33 @@ void SimulationDB::sortOdds(vector<Team> &v) {
     for(int i = 0; i < midStep.size(); i++) {
         for (int j = 0; j < v.size(); j++) {
             if (midStep[i] == v[j].getPlayoffAppearances()) {
+                sorted[i] = v[j];
+                v.erase(v.begin() + j);
+                break;
+            }
+        }
+    }
+
+
+    v = sorted;
+}
+
+void SimulationDB::sortName(vector<Team> v) {
+    vector<Team> sorted(v.size());
+    vector<string> midStep;
+
+
+    for (int i = 0; i < v.size(); i++) {
+        midStep.push_back(v[i].getName());
+    }
+
+
+    sort(midStep.begin(), midStep.end());
+
+
+    for(int i = 0; i < midStep.size(); i++) {
+        for (int j = 0; j < v.size(); j++) {
+            if (midStep[i] == v[j].getName()) {
                 sorted[i] = v[j];
                 v.erase(v.begin() + j);
                 break;

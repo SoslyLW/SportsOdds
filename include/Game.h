@@ -8,6 +8,7 @@
 #include <fstream>
 
 #include "Team.h"
+#include "TimeFunctions.h"
 
 using namespace std;
 
@@ -36,6 +37,8 @@ class Game {
         void setAwayWP(float f) { aWP = f; };
         double getProb() { return prob; };
         void setProb(float f) { prob = f; };
+        string getDateString() { return dateString; };
+        void setDateString(string s) { dateString = s; };
 
         void log5();
 
@@ -45,7 +48,7 @@ class Game {
         bool ot, so, played;
         float hWP, aWP;
         double prob;
-        string date;
+        string dateString;
 };
 
 #endif // GAME_H

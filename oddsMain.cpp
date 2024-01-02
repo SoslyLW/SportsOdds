@@ -4,14 +4,17 @@
 ***/
 
 // Include classes
+#include "include/TimeFunctions.h"
 #include "include/Team.h"
 #include "include/Game.h"
 #include "include/League.h"
 #include "include/SimulationDB.h"
 #include "include/SimulationTester.h"
+#include "include/SimulationHistory.h"
 
 int main() {
     // Create Variables
+    TimeFunctions TimeFunctions;
     League nhl;
     char verbose;
     int numSimulations = 0;
@@ -20,7 +23,6 @@ int main() {
     if (nhl.readTeams("nhlteams.csv") == 404) {
         return 404;
     }
-    // if (nhl.readSchedule("2024.txt") == 404) {
     if (nhl.readSchedule("nhlschedule2024.csv") == 404) {
         return 404;
     }
@@ -41,7 +43,7 @@ int main() {
         return 0;
     }
 
-    if (verbose != 'T') {
+    if (verbose != 'T' && verbose != 'S') {
         cout << "Number of trials? ";
         cin >> numSimulations;
 
@@ -52,7 +54,7 @@ int main() {
     }
 
     // Create object for class that runs the Monte Carlo simulation
-    SimulationDB MonteCarlo(numSimulations);
+    SimulationDB MonteCarlo(nhl, numSimulations);
 
     // Print info to screen if necessary
     if (verbose == 'y' || verbose == 'Y') {
@@ -62,6 +64,12 @@ int main() {
         //Run speed tests in future
         SimulationTester Tester(MonteCarlo, nhl);
         Tester.runTestSuite();
+
+        return 0;
+    } else if (verbose == 'S') {
+        SimulationHistory sh(nhl);
+        sh.SimulateDayByDay();
+        // sh.printToJSON("");
 
         return 0;
     }

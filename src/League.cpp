@@ -4,6 +4,23 @@ League::League() {
     //ctor
 }
 
+// League::League(League &l) {
+//     //copy ctor
+//     TSNToIndex = l.TSNToIndex;
+//     TSNtoOriginalIndex = l.TSNtoOriginalIndex;
+//     nameToIndex = l.nameToIndex;
+
+//     //Variables not in private to aid with speed of simulation
+//     teams = l.teams;
+//     originalTeamConfiguration = l.originalTeamConfiguration;
+//     sched = l.sched;
+
+//     numGames = l.numGames;
+//     startDate = l.startDate;
+//     endDate = l.endDate;
+//     currentDate = l.currentDate;
+// }
+
 int League::readTeams(string filename) {
     ifstream teamsFile(filename);
     string discard;
@@ -59,6 +76,7 @@ int League::readTeams(string filename) {
 int League::readSchedule(string filename) {
     ifstream schedFile(filename);
     string discard;
+    bool foundCurrentDate = false;
 
     if (!schedFile.is_open()) {
         cout << "File not found";
@@ -90,6 +108,8 @@ int League::readSchedule(string filename) {
         getline(s, LOG, ',');
         getline(s, notes, ',');
 
+        tempGame.setDateString(date);
+
         // Find teams associated with games using name map
         tempGame.setHomeTeam(teams[nameToIndex[homeTeam]]);
         tempGame.setAwayTeam(teams[nameToIndex[awayTeam]]);
@@ -108,10 +128,102 @@ int League::readSchedule(string filename) {
             if (OT == "SO") {
                 tempGame.setSO(true);
             }
+        } else {
+            if (!foundCurrentDate) {
+                foundCurrentDate = true;
+                currentDate = TimeFunctions::makeDate(date);
+            }
         }
 
         sched.push_back(tempGame);
     }
+
+    numGames = sched.size();
+
+    startDate = TimeFunctions::makeDate(sched[0].getDateString());
+    endDate = TimeFunctions::makeDate(sched[numGames - 1].getDateString());
+
+    return 0;
+}
+int League::readScheduleToDate(string filename, string endString) {
+    ifstream schedFile(filename);
+    string discard;
+    bool foundCurrentDate = false;
+    bool reachedDate = false;
+    bool finishedDate = false;
+
+    if (!schedFile.is_open()) {
+        cout << "File not found";
+        return 404;
+    }
+
+    // Read and do nothing with top row of csv
+    getline(schedFile, discard);
+
+    while (!schedFile.eof()) {
+        Game tempGame;
+        string line, date, homeTeam, awayTeam, homeGoals, awayGoals, OT, attendance, LOG, notes;
+
+        getline(schedFile, line);
+        stringstream s(line);
+
+        //make sure that an empty team is not submitted
+        if (line.empty()) {
+            break;
+        }
+
+        getline(s, date, ',');
+        getline(s, awayTeam, ',');
+        getline(s, awayGoals, ',');
+        getline(s, homeTeam, ',');
+        getline(s, homeGoals, ',');
+        getline(s, OT, ',');
+        getline(s, attendance, ',');
+        getline(s, LOG, ',');
+        getline(s, notes, ',');
+
+        tempGame.setDateString(date);
+
+        if (!reachedDate && tempGame.getDateString() == endString) {
+            reachedDate = true;
+        }
+
+        if (reachedDate && tempGame.getDateString() != endString) {
+            finishedDate = true;
+        }
+
+        // Find teams associated with games using name map
+        tempGame.setHomeTeam(teams[nameToIndex[homeTeam]]);
+        tempGame.setAwayTeam(teams[nameToIndex[awayTeam]]);
+
+        //Record stats of games if it has been played
+        if (!homeGoals.empty() && !finishedDate) {
+            tempGame.setPlayed(true);
+
+            tempGame.setHomeScore(stoi(homeGoals));
+            tempGame.setAwayScore(stoi(awayGoals));
+
+            if (OT == "OT" || OT == "SO") {
+                tempGame.setOT(true);
+            }
+
+            if (OT == "SO") {
+                tempGame.setSO(true);
+            }
+        } else {
+            if (!foundCurrentDate) {
+                foundCurrentDate = true;
+                currentDate = TimeFunctions::makeDate(date);
+            }
+        }
+
+        sched.push_back(tempGame);
+    }
+
+    numGames = sched.size();
+
+    startDate = TimeFunctions::makeDate(sched[0].getDateString());
+    endDate = TimeFunctions::makeDate(sched[numGames - 1].getDateString());
 
     return 0;
 }
@@ -167,12 +279,6 @@ void League::loadFromSchedule(bool firstTime) {
         sched[i].setHomeTeam(teams[j]);
 
         if (sched[i].getHomeScore() > sched[i].getAwayScore()) {
-            /*if (sched[i].getOT()) {
-                teams[j].setOTW(teams[j].getOTW() + 1);
-            } else {
-                teams[j].setWins(teams[j].getWins() + 1);
-            }*/
-
             teams[j].setWins(teams[j].getWins() + 1);
         } else {
             if (sched[i].getOT()) {
@@ -192,12 +298,6 @@ void League::loadFromSchedule(bool firstTime) {
         sched[i].setAwayTeam(teams[j]);
 
         if (sched[i].getAwayScore() > sched[i].getHomeScore()) {
-            /*if (sched[i].getOT()) {
-                teams[j].setOTW(teams[j].getOTW() + 1);
-            } else {
-                teams[j].setWins(teams[j].getWins() + 1);
-            }*/
-
             teams[j].setWins(teams[j].getWins() + 1);
         } else {
             if (sched[i].getOT()) {

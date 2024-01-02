@@ -16,6 +16,7 @@
 
 #include "Team.h"
 #include "Game.h"
+#include "TimeFunctions.h"
 
 using namespace std;
 
@@ -23,9 +24,17 @@ class League
 {
     public:
         League();
+        // League(League &l);
+
+        //Getters and Setters
+        int getNumGames() { return numGames; };
+        tm getStartDate() { return startDate; };
+        tm getEndDate() { return endDate; };
+        tm getCurrentDate() { return currentDate; };
 
         int readTeams(string filename);
         int readSchedule(string filename);
+        int readScheduleToDate(string filename, string endDate);
 
         void resetStandings();
         void resetStandingsToLoadState();
@@ -60,6 +69,11 @@ class League
         vector<Team> teams;
         vector<Team> originalTeamConfiguration;
         vector<Game> sched;
+
+        int numGames;
+        tm startDate;
+        tm endDate;
+        tm currentDate;
 };
 
 #endif // LEAGUE_H

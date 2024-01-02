@@ -6,7 +6,8 @@
 class SimulationDB {
     public:
         SimulationDB();
-        SimulationDB(int numSims);
+        SimulationDB(League l);
+        SimulationDB(League l, int numSims);
         void simulateOne(League league);
         void simulate(League league);
 
@@ -16,6 +17,7 @@ class SimulationDB {
         void sortROW(vector<Team> &v);
         void sortDifferential(vector<Team> &v);
         void sortPyth(vector<Team> &v);
+        void sortName(vector<Team> v);
 
         void sortOdds(vector<Team> &v);
 
@@ -24,9 +26,12 @@ class SimulationDB {
         void printSimulationResultsToFile(string filename);
         void printSimulationResultsToJSON(string filename);
 
+        int getTrials() { return trials; };
         void setTrials(int numSims) { trials = numSims; };
+        vector<Team> getTeamResults() { return teamResults; };
 
     private:
+        League baseLeague;
         vector<League> seasons;
         vector<Team> teamResults;
         vector<Team> printingTeamResults;
