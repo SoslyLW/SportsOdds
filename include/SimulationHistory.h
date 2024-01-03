@@ -12,7 +12,7 @@ struct TeamAtDate
     int mostTrials; //Keep track of the deepest simulation so it won't be overwritten
 };
 
-const int defaultTrials = 100;
+const int defaultTrials = 1000;
 
 class SimulationHistory {
     public:

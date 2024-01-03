@@ -121,11 +121,11 @@ void SimulationHistory::printToJSON(string filename) {
     // for(tm date = startDate; end>=mktime(&date); ++date.tm_mday) {
     for (int i = 0; i < history.size(); i++) {
         // string currentDay = history[i].date;
-        cout << i << ": " << history[0].date << endl;
+        cout << i << ": " << history[i].date << endl;
         
 
         // cout << endl << currentDay << "=" << history[i].date << ": " << history[i].teams[0].getTSN();
-        f << "\t\t\t\t\t\t[";
+        f << "\t\t\t\t\t\t[\"" << history[i].date << "\",";
         // cout << "[";
 
         for (int j = 0; j < numTeams; j++) {
